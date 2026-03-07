@@ -3,6 +3,7 @@
 ## Project Documentation
 
 - [Specification](./specification.md) - Functional specifications and project requirements
+- [Feature Flow Diagram](./flow_diagram.md) - Visual representation of feature interactions and user flow
 
 ## About BORK
 

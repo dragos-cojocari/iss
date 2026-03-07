@@ -2,7 +2,7 @@
 
 ## Documentation
 
-All functional specifications and technical documentation can be found in the [docs](./docs) directory.
+All functional specifications and technical documentation can be found in [docs](./docs/index.md).
 
 ## Development Environment Setup
 
