@@ -1,6 +1,18 @@
-# Ingineria Sistemelor de Software
+# Ingineria Sistemelor de Software - Project BORK
 
-See [docs](./docs)
+## Documentation
+
+All functional specifications and technical documentation can be found in the [docs](./docs) directory.
+
+## Development Environment Setup
+
+To set up your development environment, run:
+
+```bash
+make setup
+```
+
+See the [Makefile](./Makefile) for available commands.
 
 ## Contribution Guidelines
 
