@@ -8,6 +8,7 @@ This document presents the UML Use Case Diagram for the BORK (Book Organization 
 - [Actors](#actors)
   - [Primary Actors](#primary-actors)
   - [Secondary Actors](#secondary-actors)
+- [Business Rules](#business-rules)
 - [Use Cases](#use-cases)
   - [UC-1: Import Books and Users](#uc-1-import-books-and-users)
   - [UC-2: Login](#uc-2-login)
@@ -25,7 +26,6 @@ This document presents the UML Use Case Diagram for the BORK (Book Organization 
   - [Prerequisite Relationships](#prerequisite-relationships)
   - [Include Relationships](#include-relationships)
   - [Extend Relationships](#extend-relationships)
-- [Business Rules](#business-rules)
 
 ## Use Case Diagram
 
@@ -64,7 +64,7 @@ graph TB
 
     System -->|uses| UC1
 
-    UC12 -.->|includes| UC2
+    UC2 -.->|includes| UC12
     UC3 -.->|requires| UC2
     UC4 -.->|requires| UC2
     UC5 -.->|extends| UC4
@@ -93,6 +93,14 @@ graph TB
 - **System Administrator**: External actor responsible for data management
   - Imports book inventory and user accounts via CSV/JSON files
   - No direct system interface; operates through file imports
+
+## Business Rules
+
+1. **Rental Limit**: Maximum 3 books per user at any time (including books in cart)
+2. **Rental Period**: Maximum 30 days per rental
+3. **Availability**: Books can only be added to cart if not currently rented by another user
+4. **Authentication**: All use cases except UC1 require user authentication
+5. **Data Management**: All data updates occur through file imports (UC1)
 
 ## Use Cases
 
@@ -757,11 +765,3 @@ TBD (to be determined during implementation)
 
 - **UC7 (Add Book to Cart) extends UC4 (View Available Books)**: Adding to cart is an optional action while viewing books
 - **UC5 (Filter Books) extends UC4 (View Available Books)**: Filtering is an optional enhancement to book viewing
-
-## Business Rules
-
-1. **Rental Limit**: Maximum 3 books per user at any time (including books in cart)
-2. **Rental Period**: Maximum 30 days per rental
-3. **Availability**: Books can only be added to cart if not currently rented by another user
-4. **Authentication**: All use cases except UC1 require user authentication
-5. **Data Management**: All data updates occur through file imports (UC1)
