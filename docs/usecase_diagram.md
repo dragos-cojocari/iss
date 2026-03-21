@@ -119,13 +119,15 @@ A System Administrator imports book inventory and user account data from CSV/JSO
 System Administrator has new or updated CSV/JSON files containing book or user data.
 
 **Preconditions**
-PRE-1. CSV/JSON files are properly formatted and validated.
-PRE-2. System Administrator has file system access to the import directory.
+
+- PRE-1. CSV/JSON files are properly formatted and validated.
+- PRE-2. System Administrator has file system access to the import directory.
 
 **Postconditions**
-POST-1. Book inventory is updated in the database.
-POST-2. User accounts are created or updated in the database.
-POST-3. Import log is generated with success/failure status.
+
+- POST-1. Book inventory is updated in the database.
+- POST-2. User accounts are created or updated in the database.
+- POST-3. Import log is generated with success/failure status.
 
 **Normal flow**
 1.0 Import Data
@@ -175,13 +177,15 @@ A Student authenticates with their credentials to access the BORK system. Upon s
 Student navigates to the BORK system and requests to log in.
 
 **Preconditions**
-PRE-1. Student has a valid user account in the system.
-PRE-2. Student knows their username and password.
+
+- PRE-1. Student has a valid user account in the system.
+- PRE-2. Student knows their username and password.
 
 **Postconditions**
-POST-1. Student session is established.
-POST-2. Student is authenticated and authorized to access system features.
-POST-3. Overdue notifications are displayed if applicable.
+
+- POST-1. Student session is established.
+- POST-2. Student is authenticated and authorized to access system features.
+- POST-3. Overdue notifications are displayed if applicable.
 
 **Normal flow**
 2.0 Login
@@ -231,11 +235,13 @@ A Student securely terminates their authenticated session in the BORK system.
 Student requests to log out of the system.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
+
+- PRE-1. Student is logged in to the system.
 
 **Postconditions**
-POST-1. Student session is terminated.
-POST-2. Student is redirected to login page.
+
+- POST-1. Student session is terminated.
+- POST-2. Student is redirected to login page.
 
 **Normal flow**
 3.0 Logout
@@ -272,11 +278,13 @@ A Student views a complete list of books available in the library. The list disp
 Student navigates to the book browsing interface.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
+
+- PRE-1. Student is logged in to the system.
 
 **Postconditions**
-POST-1. Complete book list is displayed to Student.
-POST-2. Book availability status is shown for each book.
+
+- POST-1. Complete book list is displayed to Student.
+- POST-2. Book availability status is shown for each book.
 
 **Normal flow**
 4.0 View Available Books
@@ -321,12 +329,14 @@ A Student applies filters to narrow down the book list by title, author, or cate
 Student requests to filter the book list while viewing available books.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
-PRE-2. Student is viewing the book list (UC-4).
+
+- PRE-1. Student is logged in to the system.
+- PRE-2. Student is viewing the book list (UC-4).
 
 **Postconditions**
-POST-1. Filtered book list is displayed.
-POST-2. Filter criteria are preserved during the session.
+
+- POST-1. Filtered book list is displayed.
+- POST-2. Filter criteria are preserved during the session.
 
 **Normal flow**
 5.0 Filter Books
@@ -378,11 +388,13 @@ A Student views all books they currently have rented, including rental dates, du
 Student navigates to their current rentals section or system automatically displays rentals.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
+
+- PRE-1. Student is logged in to the system.
 
 **Postconditions**
-POST-1. Current rentals are displayed with rental dates and status.
-POST-2. Overdue status is clearly indicated for late returns.
+
+- POST-1. Current rentals are displayed with rental dates and status.
+- POST-2. Overdue status is clearly indicated for late returns.
 
 **Normal flow**
 6.0 View Current Rentals
@@ -428,14 +440,16 @@ A Student adds an available book to their rental cart in preparation for checkou
 Student selects a book and requests to add it to the rental cart.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
-PRE-2. Student is viewing available books (UC-4).
-PRE-3. Selected book is currently available (not rented by another user).
-PRE-4. Student has not reached the 3-book rental limit (including current rentals and cart items).
+
+- PRE-1. Student is logged in to the system.
+- PRE-2. Student is viewing available books (UC-4).
+- PRE-3. Selected book is currently available (not rented by another user).
+- PRE-4. Student has not reached the 3-book rental limit (including current rentals and cart items).
 
 **Postconditions**
-POST-1. Book is added to Student's rental cart.
-POST-2. Cart item count is updated.
+
+- POST-1. Book is added to Student's rental cart.
+- POST-2. Cart item count is updated.
 
 **Normal flow**
 7.0 Add Book to Cart
@@ -486,11 +500,13 @@ A Student reviews all books currently in their rental cart before proceeding to 
 Student navigates to the rental cart or requests to review cart before checkout.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
+
+- PRE-1. Student is logged in to the system.
 
 **Postconditions**
-POST-1. Cart contents are displayed to Student.
-POST-2. Student can proceed to checkout or modify cart.
+
+- POST-1. Cart contents are displayed to Student.
+- POST-2. Student can proceed to checkout or modify cart.
 
 **Normal flow**
 8.0 Review Rental Cart
@@ -541,12 +557,14 @@ A Student removes a book from their rental cart before checkout.
 Student selects a book in the cart and requests to remove it.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
-PRE-2. Student has at least one book in the rental cart.
+
+- PRE-1. Student is logged in to the system.
+- PRE-2. Student has at least one book in the rental cart.
 
 **Postconditions**
-POST-1. Selected book is removed from cart.
-POST-2. Cart item count is updated.
+
+- POST-1. Selected book is removed from cart.
+- POST-2. Cart item count is updated.
 
 **Normal flow**
 9.0 Remove Book from Cart
@@ -588,16 +606,18 @@ A Student finalizes the rental of all books in their cart. The system creates re
 Student confirms cart contents and requests to complete the checkout.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
-PRE-2. Student has at least one book in the rental cart.
-PRE-3. Total books (current rentals + cart items) does not exceed 3.
-PRE-4. All books in cart are still available.
+
+- PRE-1. Student is logged in to the system.
+- PRE-2. Student has at least one book in the rental cart.
+- PRE-3. Total books (current rentals + cart items) does not exceed 3.
+- PRE-4. All books in cart are still available.
 
 **Postconditions**
-POST-1. Rental records are created for all books in cart.
-POST-2. Book availability status is updated to "rented".
-POST-3. Rental cart is cleared.
-POST-4. Current rentals display is updated (UC-6).
+
+- POST-1. Rental records are created for all books in cart.
+- POST-2. Book availability status is updated to "rented".
+- POST-3. Rental cart is cleared.
+- POST-4. Current rentals display is updated (UC-6).
 
 **Normal flow**
 10.0 Checkout Rental
@@ -655,13 +675,15 @@ A Student returns a rented book, making it available for other users to rent. Th
 Student selects a rented book and requests to return it.
 
 **Preconditions**
-PRE-1. Student is logged in to the system.
-PRE-2. Student has at least one active rental.
+
+- PRE-1. Student is logged in to the system.
+- PRE-2. Student has at least one active rental.
 
 **Postconditions**
-POST-1. Rental record is updated with return date and status "returned".
-POST-2. Book availability status is updated to "available".
-POST-3. Book appears in available books list.
+
+- POST-1. Rental record is updated with return date and status "returned".
+- POST-2. Book availability status is updated to "available".
+- POST-3. Book appears in available books list.
 
 **Normal flow**
 11.0 Return Book
@@ -707,12 +729,14 @@ The system automatically checks for overdue book rentals when a Student logs in 
 Student successfully logs in to the system (UC-2).
 
 **Preconditions**
-PRE-1. Student is logging in to the system.
-PRE-2. Student has an active session being established.
+
+- PRE-1. Student is logging in to the system.
+- PRE-2. Student has an active session being established.
 
 **Postconditions**
-POST-1. Overdue notifications are displayed if applicable.
-POST-2. Student is aware of any overdue rentals.
+
+- POST-1. Overdue notifications are displayed if applicable.
+- POST-2. Student is aware of any overdue rentals.
 
 **Normal flow**
 12.0 View Overdue Notifications
