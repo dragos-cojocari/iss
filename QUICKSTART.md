@@ -12,7 +12,7 @@ docker --version
 docker-compose --version
 
 # Check Java (for local development)
-java --version  # Should be 21
+java --version  # Should be 25
 
 # Check Go (for local development)
 go version  # Should be 1.23

@@ -1,9 +1,9 @@
 # BORK - Book Organization & Rental Kiosk
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/projects/jdk/21/)
+[![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://openjdk.org/projects/jdk/25/)
 [![Go](https://img.shields.io/badge/Go-1.23-00ADD8.svg)](https://go.dev/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-6DB33F.svg)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-6DB33F.svg)](https://spring.io/projects/spring-boot)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791.svg)](https://www.postgresql.org/)
 
 A library management system designed for university use, allowing students to browse, filter, and rent books through a terminal-based interface.
@@ -52,7 +52,7 @@ BORK is a simplified library management system with:
 ### Prerequisites
 
 - **Docker** & **Docker Compose**
-- **Java 21** (local dev)
+- **Java 25** (local dev)
 - **Go 1.23** (local dev)
 - **Maven 3.9+** (backend builds)
 

@@ -4,8 +4,8 @@ Spring Boot REST API for the BORK (Book Organization & Rental Kiosk) library man
 
 ## Technology Stack
 
-- **Java**: 21
-- **Framework**: Spring Boot 3.2.5
+- **Java**: 25
+- **Framework**: Spring Boot 3.5.0
 - **ORM**: Hibernate (via Spring Data JPA)
 - **Database**: PostgreSQL 16
 - **Build Tool**: Maven
@@ -34,7 +34,7 @@ backend/
 
 ## Prerequisites
 
-- Java 21 (JDK)
+- Java 25 (JDK)
 - Maven 3.9+
 - PostgreSQL (running via Docker or locally)
 
