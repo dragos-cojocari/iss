@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: bork-backend
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${POSTGRES_DB:bork_db}
+    username: ${POSTGRES_USER:bork_user}
+    password: ${POSTGRES_PASSWORD:bork_password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+server:
+  port: ${BACKEND_PORT:8080}
+  error:
+    include-message: always
+    include-stacktrace: on_param
+
+logging:
+  level:
+    com.bork: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

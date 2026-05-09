@@ -1,0 +1,84 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: bork-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bork_db}
+      POSTGRES_USER: ${POSTGRES_USER:-bork_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bork_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bork_user -d bork_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bork-network
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bork-backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-bork_db}
+      POSTGRES_USER: ${POSTGRES_USER:-bork_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bork_password}
+      BACKEND_PORT: 8080
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - bork-network
+
+  # Go TUI Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bork-frontend
+    environment:
+      API_BASE_URL: http://backend:8080/api
+      TERM: xterm-256color
+    stdin_open: true
+    tty: true
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - bork-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  bork-network:
+    driver: bridge
