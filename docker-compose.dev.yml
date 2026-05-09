@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: bork-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bork_db}
+      POSTGRES_USER: ${POSTGRES_USER:-bork_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bork_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bork_user -d bork_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bork-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  bork-network:
+    driver: bridge
