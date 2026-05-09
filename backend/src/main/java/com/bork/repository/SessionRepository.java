@@ -29,8 +29,12 @@ public interface SessionRepository extends JpaRepository<Session, UUID> {
     /**
      * Find session by ID with user eagerly fetched
      */
-    @Query("SELECT s FROM Session s JOIN FETCH s.user WHERE s.sessionId = :sessionId AND s.isActive = true AND s.expiresAt > :now")
-    Optional<Session> findActiveSessionWithUser(@Param("sessionId") UUID sessionId, @Param("now") LocalDateTime now);
+    @Query("SELECT s FROM Session s JOIN FETCH s.user " +
+           "WHERE s.sessionId = :sessionId AND s.isActive = true " +
+           "AND s.expiresAt > :now")
+    Optional<Session> findActiveSessionWithUser(
+            @Param("sessionId") UUID sessionId,
+            @Param("now") LocalDateTime now);
 
     /**
      * Find all active sessions for a user

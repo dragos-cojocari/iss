@@ -4,35 +4,48 @@
 FROM golang:1.26.3-alpine AS build
 WORKDIR /app
 
-# Install dependencies
-RUN apk add --no-cache git
+# Install build dependencies
+RUN apk add --no-cache git ca-certificates tzdata
 
-# Copy go mod files
+# Copy go mod files and download dependencies (cached layer)
 COPY go.mod go.sum ./
-RUN go mod download
+RUN go mod download && go mod verify
 
-# Copy source code
-COPY . .
+# Copy source code (exclude tests and unnecessary files)
+COPY cmd ./cmd
+COPY internal ./internal
 
-# Build binary
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o bork-tui ./cmd/bork-tui
+# Build optimized binary for production
+# -ldflags: strip debug info and reduce binary size
+# -trimpath: remove file system paths from binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -a \
+    -installsuffix cgo \
+    -ldflags='-w -s -extldflags "-static"' \
+    -trimpath \
+    -o bork-tui ./cmd/bork-tui
 
-# Stage 2: Runtime
-FROM alpine:latest
+# Stage 2: Runtime (minimal scratch-based image)
+FROM alpine:3.19
 WORKDIR /app
 
-# Install ca-certificates for HTTPS
-RUN apk --no-cache add ca-certificates
+# Install minimal runtime dependencies
+RUN apk add --no-cache ca-certificates tzdata dumb-init \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user with specific UID/GID
+RUN addgroup -g 1001 -S bork && adduser -u 1001 -S bork -G bork
 
 # Copy binary from build stage
-COPY --from=build /app/bork-tui .
+COPY --from=build --chown=bork:bork /app/bork-tui .
 
-# Run as non-root user
-RUN addgroup -S bork && adduser -S bork -G bork
-USER bork
+# Switch to non-root user
+USER bork:bork
 
-# Set terminal environment
-ENV TERM=xterm-256color
+# Set production environment variables
+ENV TERM=xterm-256color \
+    TZ=UTC
 
-# Run the TUI application
-ENTRYPOINT ["./bork-tui"]
+# Run the TUI application with dumb-init for proper signal handling
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["./bork-tui"]

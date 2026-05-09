@@ -225,12 +225,12 @@ func (b *BrowseBooksView) View() string {
 			}
 
 			var bookContent strings.Builder
-			bookContent.WriteString(fmt.Sprintf("📖 %s ", book.Title))
+			fmt.Fprintf(&bookContent, "📖 %s ", book.Title)
 			bookContent.WriteString(statusStyle.Render(status))
 			bookContent.WriteString("\n")
-			bookContent.WriteString(fmt.Sprintf("   Author: %s\n", book.Author))
-			bookContent.WriteString(fmt.Sprintf("   Category: %s\n", book.Category.Name))
-			bookContent.WriteString(fmt.Sprintf("   ISBN: %s", book.ISBN))
+			fmt.Fprintf(&bookContent, "   Author: %s\n", book.Author)
+			fmt.Fprintf(&bookContent, "   Category: %s\n", book.Category.Name)
+			fmt.Fprintf(&bookContent, "   ISBN: %s", book.ISBN)
 
 			if localIdx == b.selectedBook {
 				booksContent.WriteString(selectedBookStyle.Render(bookContent.String()))

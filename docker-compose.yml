@@ -19,6 +19,27 @@ services:
       retries: 5
     networks:
       - bork-network
+    # Security settings
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 1G
+        reservations:
+          cpus: "1.0"
+          memory: 512M
+    restart: unless-stopped
 
   # Spring Boot Backend
   backend:
@@ -55,6 +76,25 @@ services:
       start_period: 40s
     networks:
       - bork-network
+    # Security settings
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    # Temporary filesystem for /tmp (required by Spring Boot)
+    tmpfs:
+      - /tmp:size=200M,mode=1777
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 1G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    restart: unless-stopped
 
   # Go TUI Frontend
   frontend:
@@ -72,6 +112,22 @@ services:
         condition: service_healthy
     networks:
       - bork-network
+    # Security settings
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+    restart: unless-stopped
 
 volumes:
   postgres_data:

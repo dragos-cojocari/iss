@@ -2,11 +2,10 @@ package ui
 
 import (
 	"bufio"
-	"math/rand"
+	"math/rand/v2"
 	"os"
 	"strings"
 	"sync"
-	"time"
 )
 
 // QuoteManager handles loading and cycling through Matrix quotes
@@ -45,11 +44,12 @@ func (qm *QuoteManager) loadQuotes() {
 			"Free your mind.",
 		}
 		// Randomize starting position
-		rand.Seed(time.Now().UnixNano())
-		qm.currentIndex = rand.Intn(len(qm.quotes))
+		qm.currentIndex = rand.IntN(len(qm.quotes))
 		return
 	}
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -61,8 +61,7 @@ func (qm *QuoteManager) loadQuotes() {
 
 	// Randomize starting position
 	if len(qm.quotes) > 0 {
-		rand.Seed(time.Now().UnixNano())
-		qm.currentIndex = rand.Intn(len(qm.quotes))
+		qm.currentIndex = rand.IntN(len(qm.quotes))
 	}
 }
 
@@ -100,6 +99,6 @@ func (qm *QuoteManager) RandomQuote() string {
 		return "There is no spoon."
 	}
 
-	qm.currentIndex = rand.Intn(len(qm.quotes))
+	qm.currentIndex = rand.IntN(len(qm.quotes))
 	return qm.quotes[qm.currentIndex]
 }

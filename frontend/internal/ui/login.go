@@ -96,9 +96,10 @@ func (l *LoginView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		default:
 			// Handle text input
 			if len(msg.String()) == 1 {
-				if l.focusedField == 0 {
+				switch l.focusedField {
+				case 0:
 					l.username += msg.String()
-				} else if l.focusedField == 1 {
+				case 1:
 					l.password += msg.String()
 				}
 			}

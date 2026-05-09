@@ -65,7 +65,7 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c":
 			// Logout before quitting if user is logged in
 			if a.currentUser != nil {
-				a.apiClient.Logout()
+				_ = a.apiClient.Logout()
 			}
 			return a, tea.Quit
 		case "esc":
@@ -74,7 +74,7 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case LoginViewType, DashboardViewType:
 				// Logout before quitting if user is logged in
 				if a.currentUser != nil {
-					a.apiClient.Logout()
+					_ = a.apiClient.Logout()
 				}
 				return a, tea.Quit
 			case OverdueViewType:
