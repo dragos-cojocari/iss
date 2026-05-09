@@ -66,7 +66,9 @@ func (o *OverdueView) View() string {
 
 	buttonStyle := lipgloss.NewStyle().
 		Foreground(MatrixBlack).
-		Background(MatrixGreen).
+		Background(MatrixHighlight).
+		Border(lipgloss.NormalBorder()).
+		BorderForeground(MatrixHighlight).
 		Padding(0, 3).
 		Bold(true)
 
@@ -93,8 +95,13 @@ func (o *OverdueView) View() string {
 	}
 
 	content.WriteString("\n\n")
-	content.WriteString(strings.Repeat(" ", 25))
-	content.WriteString(buttonStyle.Render("[ Continue ]"))
+	// Center the button properly
+	buttonText := buttonStyle.Render("[ Continue ]")
+	buttonCenterStyle := lipgloss.NewStyle().
+		Width(62).
+		Align(lipgloss.Center).
+		Background(MatrixBlack)
+	content.WriteString(buttonCenterStyle.Render(buttonText))
 
 	var view strings.Builder
 	view.WriteString(lipgloss.NewStyle().Align(lipgloss.Center).Render(
