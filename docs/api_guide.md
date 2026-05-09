@@ -472,6 +472,7 @@ All test users have the password: **`Test123!`**
 
 For more information, see:
 
+- [Quick Start Guide](./quickstart.md)
+- [Development Guide](./development.md)
 - [Backend README](../backend/README.md)
 - [Database README](../database/README.md)
-- [Quick Start Guide](../QUICKSTART.md)

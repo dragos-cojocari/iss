@@ -131,25 +131,23 @@ See [Development Guide](docs/development.md) for detailed instructions on:
 
 ## � Documentation
 
-Comprehensive documentation is available in the `docs/` directory:
+See [Documentation Index](docs/index.md) for complete documentation.
 
-- [Development Guide](docs/development.md) - **Setup, testing, Docker, and configuration**
-- [API Guide](docs/api_guide.md) - REST API documentation with curl examples
-- [Project Specification](docs/specification.md) - Requirements and features
-- [Use Case Diagram](docs/usecase_diagram.md) - System actors and use cases
-- [Class Diagram](docs/class_diagram.md) - Domain model and relationships
-- [Sequence Diagrams](docs/sd_login.md) - Login and rental workflows
-- [TUI Prototype](docs/tui_prototype.md) - Frontend design mockups
-- [Non-Functional Requirements](docs/nfr.md) - Performance, security, and quality attributes
+**Quick Links:**
+
+- [Quick Start Guide](docs/quickstart.md) - Get running in under 5 minutes
+- [Development Guide](docs/development.md) - Setup, testing, Docker, configuration
+- [API Guide](docs/api_guide.md) - REST API reference with curl examples
+- [Design & Architecture](docs/design/) - Requirements, UML diagrams, UI prototypes
 
 ## 📝 Lab Assignments
 
-| Date       | Description                                                                             | Files                                                                                             |
-| ---------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| 2026-05-09 | Lab 3 & 4: add class diagram and sequence diagrams for 2 usecases. Add the UI prototype | `docs/class_diagram.md`<br>`docs/sd_login.md`<br>`docs/sd_rentbook.md`<br>`docs/tui_prototype.md` |
-| 2026-03-21 | Lab 2: Use Cases and Use Case Diagram                                                   | `docs/[ISS 2025-2026] Use case template.docx`<br>`docs/nfr.md`<br>`docs/usecase_diagram.md`       |
-| 2026-03-07 | Lab 1: Flow diagram                                                                     | `docs/flow_diagram.md`                                                                            |
-| 2026-03-07 | Lab 1: Project goals                                                                    | `Makefile`<br>`docs/specification.md`                                                             |
+| Date       | Description                                                                             | Files                                                                                                                         |
+| ---------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-09 | Lab 3 & 4: add class diagram and sequence diagrams for 2 usecases. Add the UI prototype | `docs/design/class_diagram.md`<br>`docs/design/sd_login.md`<br>`docs/design/sd_rentbook.md`<br>`docs/design/tui_prototype.md` |
+| 2026-03-21 | Lab 2: Use Cases and Use Case Diagram                                                   | `docs/design/[ISS 2025-2026] Use case template.docx`<br>`docs/design/nfr.md`<br>`docs/design/usecase_diagram.md`              |
+| 2026-03-07 | Lab 1: Flow diagram                                                                     | `docs/design/flow_diagram.md`                                                                                                 |
+| 2026-03-07 | Lab 1: Project goals                                                                    | `Makefile`<br>`docs/design/specification.md`                                                                                  |
 
 ## 🤝 Contribution Guidelines
 
