@@ -209,14 +209,44 @@ The `docker-build` target includes a workaround for Docker credential helper iss
 
 ### CI/CD Build
 
-In GitHub Actions, images are built after all tests pass:
+The CI/CD pipeline (`cicd.yml`) uses **path-based filtering** so jobs only run when relevant files have changed. This is powered by [`dorny/paths-filter`](https://github.com/dorny/paths-filter).
+
+#### Path Filters
+
+| Filter     | Paths                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------- |
+| `backend`  | `backend/**`                                                                                |
+| `frontend` | `frontend/**`                                                                               |
+| `docker`   | `docker-compose.yml`, `docker-compose.dev.yml`, `backend/Dockerfile`, `frontend/Dockerfile` |
+
+#### Conditional Job Execution
+
+| Job             | Runs when                                                 |
+| --------------- | --------------------------------------------------------- |
+| `pre-commit`    | Always                                                    |
+| `secret-scan`   | Always                                                    |
+| `lint-backend`  | `backend/**` changed                                      |
+| `lint-frontend` | `frontend/**` changed                                     |
+| `test-backend`  | `backend/**` changed (after lint)                         |
+| `test-frontend` | `frontend/**` changed (after lint)                        |
+| `docker-build`  | Backend, frontend, or Docker config changed (after tests) |
+
+Backend and frontend pipelines run **in parallel** — a PR touching only `backend/` will not wait for frontend lint or tests.
+
+PRs that only modify documentation, database scripts, or other non-code files will skip lint, test, and docker-build jobs entirely.
+
+#### Build & Publish (main branch)
+
+The `build-publish.yml` workflow also uses path filters and only triggers on pushes to `main` that change `backend/**`, `frontend/**`, `docker-compose.yml`, or `docker-compose.dev.yml`.
+
+#### Docker Build Step
 
 ```yaml
 - name: Build Docker images
   run: make docker-build
 ```
 
-The workflow ensures:
+The pipeline ensures:
 
 - Code is linted (no Checkstyle in Docker build)
 - Tests pass (no tests in Docker build)
