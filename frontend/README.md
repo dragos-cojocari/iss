@@ -239,7 +239,7 @@ docker build -t bork-frontend .
 docker run -it --rm bork-frontend
 
 # Run with environment variables
-docker run -it --rm -e API_BASE_URL=http://backend:8080/api bork-frontend
+docker run -it --rm -e BORK_BACKEND_URL=http://backend:8080 bork-frontend
 ```
 
 ## Architecture
