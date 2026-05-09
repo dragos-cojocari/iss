@@ -62,8 +62,24 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "esc":
+		case "ctrl+c":
 			return a, tea.Quit
+		case "esc":
+			// Esc behavior depends on current view
+			switch a.currentView {
+			case LoginViewType, DashboardViewType:
+				// Quit from login or main dashboard
+				return a, tea.Quit
+			case OverdueViewType:
+				// Go to dashboard (skip overdue)
+				a.dashboardView = NewDashboardView(a.apiClient, a.currentUser)
+				a.currentView = DashboardViewType
+				return a, a.dashboardView.Init()
+			case BrowseBooksViewType:
+				// Go back to dashboard
+				a.currentView = DashboardViewType
+				return a, nil
+			}
 		}
 
 	case LoginSuccessMsg:
