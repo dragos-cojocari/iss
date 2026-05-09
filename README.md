@@ -49,62 +49,41 @@ BORK is a simplified library management system with:
 
 ## 🚀 Quick Start
 
-See [QUICKSTART.md](QUICKSTART.md) for detailed setup instructions.
-
-### 📖 Interactive API Documentation
-
-Once the backend is running, access the interactive Swagger UI at:
-
-**http://localhost:8080/swagger-ui.html**
-
-Features:
-
-- 🔍 Browse all API endpoints
-- 🧪 Test endpoints directly in the browser
-- 📝 View request/response schemas
-- 🔐 Authenticate and test protected endpoints
-
 ### Prerequisites
 
-- **Docker** and **Docker Compose**
-- **Java 21** (for local backend development)
-- **Go 1.23** (for local frontend development)
-- **Maven 3.9+** (for backend builds)
+- **Docker** & **Docker Compose**
+- **Java 21** (local dev)
+- **Go 1.23** (local dev)
+- **Maven 3.9+** (backend builds)
 
-### Option 1: Run Everything with Docker
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd iss
-
-# Set up environment
-make setup
-
-# Build and start all services
-make docker-build
-make docker-up
-
-# Access the frontend TUI
-docker attach bork-frontend
-
-# Check backend health
-curl http://localhost:8080/api/health
-```
-
-### Option 2: Local Development Mode
+### Local Development (Recommended)
 
 ```bash
-# 1. Start database only
+# 1. Start database
 make dev-db
 
-# 2. In a new terminal, start backend
+# 2. Start backend (new terminal)
 make dev-backend
 
-# 3. In another terminal, install frontend dependencies and start TUI
-make dev-frontend-deps
+# 3. Start frontend TUI (new terminal)
 make dev-frontend
 ```
+
+**Login:** `student1` / `Test123!`
+
+### Docker (Full Stack)
+
+```bash
+make docker-build
+make docker-up
+docker attach bork-frontend
+```
+
+### 📖 API Documentation
+
+**Swagger UI:** http://localhost:8080/swagger-ui.html
+
+Test endpoints, view schemas, and authenticate directly in the browser.
 
 ## 📁 Project Structure
 
@@ -142,150 +121,26 @@ iss/
 
 ## 🛠 Development
 
-### Available Make Targets
+See [Development Guide](docs/development.md) for detailed instructions on:
 
-```bash
-make help              # Show all available commands
-make setup             # Set up development environment
-make dev-db            # Start PostgreSQL only
-make dev-backend       # Run backend locally
-make dev-frontend      # Run frontend TUI locally
-make docker-build      # Build all Docker images
-make docker-up         # Start all services
-make docker-down       # Stop all services
-make test-backend      # Run backend tests
-make test-frontend     # Run frontend tests
-make clean             # Clean build artifacts
-make status            # Check service status
-```
-
-### Backend Development
-
-```bash
-cd backend
-
-# Run with Maven
-mvn spring-boot:run
-
-# Run tests
-mvn test
-
-# Build JAR
-mvn clean package
-```
-
-**API Endpoints:**
-
-- `GET /api/health` - Health check
-
-### Frontend Development
-
-```bash
-cd frontend
-
-# Install dependencies
-go mod download
-
-# Run TUI
-go run cmd/bork-tui/main.go
-
-# Run tests
-go test ./...
-
-# Build binary
-go build -o bork-tui cmd/bork-tui/main.go
-```
-
-### Database Access
-
-```bash
-# Connect to database
-make db-connect
-
-# Or manually
-docker exec -it bork-db psql -U bork_user -d bork_db
-```
+- Make targets and commands
+- Backend/Frontend development
+- Testing and Docker usage
+- Configuration and environment variables
+- API testing with curl
 
 ## � Documentation
 
 Comprehensive documentation is available in the `docs/` directory:
 
-- [API Guide](docs/api_guide.md) - **REST API documentation with curl examples**
+- [Development Guide](docs/development.md) - **Setup, testing, Docker, and configuration**
+- [API Guide](docs/api_guide.md) - REST API documentation with curl examples
 - [Project Specification](docs/specification.md) - Requirements and features
 - [Use Case Diagram](docs/usecase_diagram.md) - System actors and use cases
 - [Class Diagram](docs/class_diagram.md) - Domain model and relationships
 - [Sequence Diagrams](docs/sd_login.md) - Login and rental workflows
 - [TUI Prototype](docs/tui_prototype.md) - Frontend design mockups
 - [Non-Functional Requirements](docs/nfr.md) - Performance, security, and quality attributes
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-make test-all
-
-# Backend tests only
-make test-backend
-
-# Frontend tests only
-make test-frontend
-```
-
-## 🐳 Docker
-
-### Build Images
-
-```bash
-docker-compose build
-```
-
-### Run Services
-
-```bash
-# Start all services in background
-docker-compose up -d
-
-# Start with logs
-docker-compose up
-
-# Stop services
-docker-compose down
-
-# Stop and remove volumes
-docker-compose down -v
-```
-
-### View Logs
-
-```bash
-# All services
-docker-compose logs -f
-
-# Specific service
-docker-compose logs -f backend
-docker-compose logs -f frontend
-docker-compose logs -f db
-```
-
-## 🔧 Configuration
-
-Environment variables (see `.env.example`):
-
-```bash
-# Database
-POSTGRES_DB=bork_db
-POSTGRES_USER=bork_user
-POSTGRES_PASSWORD=bork_password
-DB_HOST=localhost
-DB_PORT=5432
-
-# Backend
-BACKEND_PORT=8080
-SPRING_PROFILES_ACTIVE=dev
-
-# Frontend
-API_BASE_URL=http://localhost:8080/api
-```
 
 ## 📝 Lab Assignments
 

@@ -5,6 +5,7 @@
 ### API & Development
 
 - [API Guide](./api_guide.md) - REST API documentation with curl examples
+- [Development Guide](./development.md) - Setup, testing, Docker, and configuration
 
 ### Requirements & Specifications
 
