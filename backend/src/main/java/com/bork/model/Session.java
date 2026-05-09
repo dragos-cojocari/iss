@@ -1,5 +1,7 @@
 package com.bork.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,6 +22,8 @@ import java.util.UUID;
     @Index(name = "idx_sessions_is_active", columnList = "is_active"),
     @Index(name = "idx_sessions_expires_at", columnList = "expires_at")
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Schema(description = "Session entity representing an authenticated user session")
 public class Session {
 
     @Id
@@ -29,6 +33,7 @@ public class Session {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_sessions_user"))
+    @Schema(description = "Associated user")
     private User user;
 
     @CreationTimestamp
