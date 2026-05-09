@@ -108,12 +108,26 @@ mvn test -Dtest=HealthControllerTest
 
 - **GET** `/api/health` - Application and database health status
 
+### Books
+
+- **GET** `/api/books` - Get all books
+- **GET** `/api/books/available` - Get available books only
+- **GET** `/api/books/{id}` - Get book by ID (UUID)
+- **GET** `/api/books/search?q={term}` - Search books by title or author
+
+### Users (Testing)
+
+- **GET** `/api/users` - Get all users
+- **GET** `/api/users/{id}` - Get user by ID (UUID)
+- **GET** `/api/users/username/{username}` - Get user by username
+
 ### Future Endpoints
 
 - `/api/auth/login` - User authentication
-- `/api/books` - Book management
+- `/api/auth/logout` - User logout
 - `/api/rentals` - Rental management
 - `/api/cart` - Shopping cart operations
+- `/api/categories` - Category management
 
 ## Configuration
 
