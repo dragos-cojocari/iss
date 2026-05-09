@@ -1,6 +1,6 @@
 module github.com/bork/frontend
 
-go 1.23
+go 1.26.3
 
 require (
 	github.com/charmbracelet/bubbletea v0.25.0

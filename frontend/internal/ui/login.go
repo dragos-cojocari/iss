@@ -114,56 +114,56 @@ func (l *LoginView) View() string {
 	// Styles
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#00BFFF")).
+		Foreground(MatrixGreen).
 		Align(lipgloss.Center).
-		MarginTop(2).
 		MarginBottom(2)
 
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#00BFFF")).
+		BorderForeground(MatrixGreen).
+		Background(MatrixBlack).
 		Padding(1, 2).
 		Width(60)
 
 	labelStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFFFF")).
+		Foreground(MatrixGreen).
 		Bold(true)
 
 	inputStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFFFF")).
-		Background(lipgloss.Color("#1a1a1a")).
+		Foreground(MatrixGreen).
+		Background(MatrixGray).
 		Padding(0, 1).
 		Width(40)
 
 	focusedInputStyle := inputStyle.Copy().
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(lipgloss.Color("#00BFFF"))
+		BorderForeground(MatrixHighlight)
 
 	buttonStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFFFF")).
-		Background(lipgloss.Color("#00BFFF")).
+		Foreground(MatrixBlack).
+		Background(MatrixGreen).
 		Padding(0, 3).
 		Bold(true)
 
 	focusedButtonStyle := buttonStyle.Copy().
-		Background(lipgloss.Color("#0080FF"))
+		Background(MatrixHighlight)
 
 	helpStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#666666")).
+		Foreground(MatrixDarkGreen).
 		Align(lipgloss.Center).
 		MarginTop(2)
 
-	// ASCII Art Logo
+	// Matrix-style ASCII Art Logo
 	logo := `
-    ██████╗  ██████╗ ██████╗ ██╗  ██╗
-    ██╔══██╗██╔═══██╗██╔══██╗██║ ██╔╝
-    ██████╔╝██║   ██║██████╔╝█████╔╝
-    ██╔══██╗██║   ██║██╔══██╗██╔═██╗
-    ██████╔╝╚██████╔╝██║  ██║██║  ██╗
-    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+    ▓▒░ ██████╗  ██████╗ ██████╗ ██╗  ██╗ ░▒▓
+    ▓▒░ ██╔══██╗██╔═══██╗██╔══██╗██║ ██╔╝ ░▒▓
+    ▓▒░ ██████╔╝██║   ██║██████╔╝█████╔╝  ░▒▓
+    ▓▒░ ██╔══██╗██║   ██║██╔══██╗██╔═██╗  ░▒▓
+    ▓▒░ ██████╔╝╚██████╔╝██║  ██║██║  ██╗ ░▒▓
+    ▓▒░ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ░▒▓
     `
 
-	subtitle := "Book Organization & Rental Kiosk v0.1.0"
+	subtitle := "01000010 01001111 01010010 01001011 // v0.1.0"
 
 	// Build form
 	var formBuilder strings.Builder
@@ -223,12 +223,11 @@ func (l *LoginView) View() string {
 
 	// Status message
 	if l.statusMsg != "" {
-		statusStyle := lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#FF6B6B")).
-			Align(lipgloss.Center).
-			MarginTop(1)
+		var statusStyle lipgloss.Style
 		if strings.Contains(l.statusMsg, "successful") {
-			statusStyle = statusStyle.Foreground(lipgloss.Color("#4CAF50"))
+			statusStyle = MatrixSuccess.Copy().Align(lipgloss.Center).MarginTop(1)
+		} else {
+			statusStyle = MatrixError.Copy().Align(lipgloss.Center).MarginTop(1)
 		}
 		view.WriteString(statusStyle.Render(l.statusMsg))
 		view.WriteString("\n")

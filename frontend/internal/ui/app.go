@@ -76,9 +76,9 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				a.currentView = DashboardViewType
 				return a, a.dashboardView.Init()
 			case BrowseBooksViewType:
-				// Go back to dashboard
+				// Go back to dashboard and cycle quote
 				a.currentView = DashboardViewType
-				return a, nil
+				return a, a.dashboardView.Init()
 			}
 		}
 
@@ -104,7 +104,8 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case BackToDashboardMsg:
 		// Transition back to dashboard from browse books
 		a.currentView = DashboardViewType
-		return a, nil
+		// Cycle to next quote when returning to dashboard
+		return a, a.dashboardView.Init()
 
 	case LogoutMsg:
 		// Transition back to login

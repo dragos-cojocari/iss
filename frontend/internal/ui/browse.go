@@ -41,7 +41,7 @@ func NewBrowseBooksView(apiClient *api.Client, user *api.UserInfo) *BrowseBooksV
 		user:         user,
 		books:        []api.Book{},
 		currentPage:  0,
-		booksPerPage: 5,
+		booksPerPage: 4,
 		selectedBook: 0,
 		isLoading:    true,
 	}
@@ -49,6 +49,8 @@ func NewBrowseBooksView(apiClient *api.Client, user *api.UserInfo) *BrowseBooksV
 
 // Init initializes the browse books view
 func (b *BrowseBooksView) Init() tea.Cmd {
+	// Cycle to next quote
+	GetQuoteManager().NextQuote()
 	return b.loadBooks()
 }
 
@@ -118,34 +120,39 @@ func (b *BrowseBooksView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (b *BrowseBooksView) View() string {
 	headerStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#00BFFF")).
-		Background(lipgloss.Color("#1a1a1a")).
+		Foreground(MatrixGreen).
+		Background(MatrixBlack).
 		Padding(0, 2)
 
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#00BFFF")).
+		BorderForeground(MatrixGreen).
+		Background(MatrixBlack).
 		Padding(1, 2).
 		Width(74)
 
 	bookStyle := lipgloss.NewStyle().
+		Foreground(MatrixDarkGreen).
+		Background(MatrixBlack).
 		Padding(1, 2).
+		Width(68).
 		MarginBottom(1)
 
 	selectedBookStyle := bookStyle.Copy().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#00BFFF")).
-		Background(lipgloss.Color("#1a1a1a"))
+		BorderForeground(MatrixHighlight).
+		Background(MatrixGray).
+		Width(68)
 
 	availableStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#4CAF50")).
+		Foreground(MatrixHighlight).
 		Bold(true)
 
 	rentedStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FF6B6B"))
+		Foreground(MatrixRed)
 
 	helpStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#666666")).
+		Foreground(MatrixDarkGreen).
 		Align(lipgloss.Center).
 		MarginTop(1)
 
@@ -154,17 +161,27 @@ func (b *BrowseBooksView) View() string {
 	// Header
 	header := fmt.Sprintf("BORK - Browse Books                 User: %s", b.user.Username)
 	view.WriteString(headerStyle.Render(header))
+	view.WriteString("\n")
+
+	// Matrix quote
+	quote := GetQuoteManager().GetQuote()
+	quoteStyle := lipgloss.NewStyle().
+		Foreground(MatrixDarkGreen).
+		Italic(true).
+		Align(lipgloss.Center).
+		Width(74)
+	view.WriteString(quoteStyle.Render(fmt.Sprintf("\" %s \"", quote)))
 	view.WriteString("\n\n")
 
 	// Books list
 	var booksContent strings.Builder
 
 	if b.isLoading {
-		booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#FFB74D")).Render("Loading books..."))
+		booksContent.WriteString(MatrixHighlightText.Render("Loading books..."))
 	} else if b.errorMsg != "" {
-		booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF6B6B")).Render("Error: " + b.errorMsg))
+		booksContent.WriteString(MatrixError.Render("Error: " + b.errorMsg))
 	} else if len(b.books) == 0 {
-		booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#666666")).Render("No books available"))
+		booksContent.WriteString(MatrixText.Render("No books available"))
 	} else {
 		// Pagination info
 		totalPages := b.getTotalPages()

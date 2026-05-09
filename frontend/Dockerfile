@@ -1,7 +1,7 @@
 # Multi-stage build for Go TUI application
 
 # Stage 1: Build
-FROM golang:1.23-alpine AS build
+FROM golang:1.26.3-alpine AS build
 WORKDIR /app
 
 # Install dependencies

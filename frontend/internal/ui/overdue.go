@@ -47,30 +47,31 @@ func (o *OverdueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (o *OverdueView) View() string {
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#FFB74D")).
+		Foreground(MatrixGreen).
 		Align(lipgloss.Center).
 		MarginTop(2).
 		MarginBottom(2)
 
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#FFB74D")).
+		BorderForeground(MatrixGreen).
+		Background(MatrixBlack).
 		Padding(2, 4).
 		Width(70)
 
 	messageStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFFFF")).
+		Foreground(MatrixDarkGreen).
 		Align(lipgloss.Center).
 		MarginBottom(2)
 
 	buttonStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFFFF")).
-		Background(lipgloss.Color("#FFB74D")).
+		Foreground(MatrixBlack).
+		Background(MatrixGreen).
 		Padding(0, 3).
 		Bold(true)
 
 	helpStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#666666")).
+		Foreground(MatrixDarkGreen).
 		Align(lipgloss.Center).
 		MarginTop(2)
 
@@ -80,7 +81,7 @@ func (o *OverdueView) View() string {
 		// Future: Display actual overdue books
 		content.WriteString(titleStyle.Render("⚠️  OVERDUE NOTICE  ⚠️"))
 		content.WriteString("\n\n")
-		content.WriteString(messageStyle.Render("You have overdue books! Please return them as soon as possible."))
+		content.WriteString(MatrixError.Copy().Align(lipgloss.Center).Render("You have overdue books! Please return them as soon as possible."))
 		content.WriteString("\n\n")
 		// Placeholder for overdue book list
 		content.WriteString(messageStyle.Render("(Overdue books will be displayed here)"))
@@ -88,7 +89,7 @@ func (o *OverdueView) View() string {
 		// No overdue books
 		content.WriteString(titleStyle.Render("✓ All Clear"))
 		content.WriteString("\n\n")
-		content.WriteString(messageStyle.Render("You have no overdue books."))
+		content.WriteString(MatrixSuccess.Copy().Align(lipgloss.Center).Render("You have no overdue books."))
 	}
 
 	content.WriteString("\n\n")

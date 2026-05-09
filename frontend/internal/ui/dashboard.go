@@ -33,6 +33,8 @@ func NewDashboardView(apiClient *api.Client, user *api.UserInfo) *DashboardView 
 
 // Init initializes the dashboard view
 func (d *DashboardView) Init() tea.Cmd {
+	// Cycle to next quote
+	GetQuoteManager().NextQuote()
 	return nil
 }
 
@@ -97,26 +99,31 @@ func (d *DashboardView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (d *DashboardView) View() string {
 	headerStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#00BFFF")).
-		Background(lipgloss.Color("#1a1a1a")).
+		Foreground(MatrixGreen).
+		Background(MatrixBlack).
 		Padding(0, 2)
 
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#00BFFF")).
+		BorderForeground(MatrixGreen).
+		Background(MatrixBlack).
 		Padding(1, 2).
 		Width(74)
 
 	menuItemStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFFFF")).
-		Padding(0, 2)
+		Foreground(MatrixDarkGreen).
+		Background(MatrixBlack).
+		Padding(0, 2).
+		Width(70)
 
 	selectedMenuStyle := menuItemStyle.Copy().
-		Foreground(lipgloss.Color("#00BFFF")).
-		Bold(true)
+		Foreground(MatrixBlack).
+		Background(MatrixGreen).
+		Bold(true).
+		Width(70)
 
 	helpStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#666666")).
+		Foreground(MatrixDarkGreen).
 		Align(lipgloss.Center).
 		MarginTop(1)
 
@@ -125,19 +132,30 @@ func (d *DashboardView) View() string {
 	// Header
 	header := fmt.Sprintf("BORK - Main Menu                    User: %s", d.user.Username)
 	view.WriteString(headerStyle.Render(header))
+	view.WriteString("\n")
+
+	// Matrix quote
+	quote := GetQuoteManager().GetQuote()
+	quoteStyle := lipgloss.NewStyle().
+		Foreground(MatrixDarkGreen).
+		Italic(true).
+		Align(lipgloss.Center).
+		Width(74)
+	view.WriteString(quoteStyle.Render(fmt.Sprintf("\" %s \"", quote)))
 	view.WriteString("\n\n")
 
 	// Current Rentals (placeholder)
 	rentalsBox := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#666666")).
+		BorderForeground(MatrixDarkGreen).
+		Background(MatrixBlack).
 		Padding(1, 2).
 		Width(74)
 
 	var rentalsContent strings.Builder
-	rentalsContent.WriteString(lipgloss.NewStyle().Bold(true).Render("MY CURRENT RENTALS (0/3)"))
+	rentalsContent.WriteString(lipgloss.NewStyle().Bold(true).Foreground(MatrixGreen).Render("MY CURRENT RENTALS (0/3)"))
 	rentalsContent.WriteString("\n\n")
-	rentalsContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#666666")).Render("No active rentals"))
+	rentalsContent.WriteString(lipgloss.NewStyle().Foreground(MatrixDarkGreen).Render("No active rentals"))
 
 	view.WriteString(rentalsBox.Render(rentalsContent.String()))
 	view.WriteString("\n\n")

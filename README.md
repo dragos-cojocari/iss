@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://openjdk.org/projects/jdk/25/)
-[![Go](https://img.shields.io/badge/Go-1.23-00ADD8.svg)](https://go.dev/)
+[![Go](https://img.shields.io/badge/Go-1.26.3-00ADD8.svg)](https://go.dev/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-6DB33F.svg)](https://spring.io/projects/spring-boot)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791.svg)](https://www.postgresql.org/)
 
@@ -53,7 +53,7 @@ BORK is a simplified library management system with:
 
 - **Docker** & **Docker Compose**
 - **Java 25** (local dev)
-- **Go 1.23** (local dev)
+- **Go 1.26.3** (local dev)
 - **Maven 3.9+** (backend builds)
 
 ### Local Development (Recommended)

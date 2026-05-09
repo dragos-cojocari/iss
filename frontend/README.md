@@ -4,10 +4,10 @@ Terminal User Interface (TUI) for the BORK (Book Organization & Rental Kiosk) li
 
 ## Technology Stack
 
-- **Language**: Go 1.23
+- **Language**: Go 1.26.3
 - **TUI Framework**: Bubble Tea (Elm-inspired)
 - **Styling**: Lipgloss
-- **Future**: HTTP client for REST API integration
+- **HTTP Client**: Native Go HTTP client with cookie jar
 
 ## Project Structure
 
@@ -31,7 +31,7 @@ frontend/
 
 ## Prerequisites
 
-- Go 1.23 or later
+- Go 1.26.3 or later
 - Terminal with 256-color support
 - Minimum terminal size: 80x24
 

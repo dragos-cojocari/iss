@@ -15,7 +15,7 @@ docker-compose --version
 java --version  # Should be 25
 
 # Check Go (for local development)
-go version  # Should be 1.23
+go version  # Should be 1.26.3
 
 # Check Maven (for local development)
 mvn --version  # Should be 3.9+
