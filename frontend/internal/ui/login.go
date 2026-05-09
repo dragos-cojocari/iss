@@ -3,9 +3,20 @@ package ui
 import (
 	"strings"
 
+	"github.com/bork/frontend/internal/api"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
+
+// LoginSuccessMsg is sent when login succeeds
+type LoginSuccessMsg struct {
+	User *api.UserInfo
+}
+
+// LoginErrorMsg is sent when login fails
+type LoginErrorMsg struct {
+	Error string
+}
 
 // LoginView represents the login screen
 type LoginView struct {
@@ -13,15 +24,21 @@ type LoginView struct {
 	password     string
 	focusedField int // 0 = username, 1 = password, 2 = button
 	cursorBlink  bool
+	apiClient    *api.Client
+	statusMsg    string
+	isLoading    bool
 }
 
 // NewLoginView creates a new login view
-func NewLoginView() *LoginView {
+func NewLoginView(apiClient *api.Client) *LoginView {
 	return &LoginView{
 		username:     "",
 		password:     "",
 		focusedField: 0,
 		cursorBlink:  true,
+		apiClient:    apiClient,
+		statusMsg:    "",
+		isLoading:    false,
 	}
 }
 
@@ -33,6 +50,16 @@ func (l *LoginView) Init() tea.Cmd {
 // Update handles messages for the login view
 func (l *LoginView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case LoginSuccessMsg:
+		l.isLoading = false
+		l.statusMsg = "Login successful!"
+		return l, nil
+
+	case LoginErrorMsg:
+		l.isLoading = false
+		l.statusMsg = "Error: " + msg.Error
+		return l, nil
+
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "tab", "down":
@@ -45,8 +72,14 @@ func (l *LoginView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "enter":
 			if l.focusedField == 2 {
-				// Login button pressed - future: authenticate
-				return l, nil
+				// Login button pressed - authenticate
+				if l.username == "" || l.password == "" {
+					l.statusMsg = "Please enter username and password"
+					return l, nil
+				}
+				l.isLoading = true
+				l.statusMsg = "Logging in..."
+				return l, l.performLogin()
 			}
 			// Move to next field
 			l.focusedField = (l.focusedField + 1) % 3
@@ -187,10 +220,35 @@ func (l *LoginView) View() string {
 		boxStyle.Render(formBuilder.String()),
 	))
 	view.WriteString("\n")
+
+	// Status message
+	if l.statusMsg != "" {
+		statusStyle := lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#FF6B6B")).
+			Align(lipgloss.Center).
+			MarginTop(1)
+		if strings.Contains(l.statusMsg, "successful") {
+			statusStyle = statusStyle.Foreground(lipgloss.Color("#4CAF50"))
+		}
+		view.WriteString(statusStyle.Render(l.statusMsg))
+		view.WriteString("\n")
+	}
+
 	view.WriteString(helpStyle.Render("Tab: Next Field | Enter: Submit | Esc: Exit"))
 
 	return lipgloss.NewStyle().
 		Align(lipgloss.Center).
 		Width(80).
 		Render(view.String())
+}
+
+// performLogin performs the login API call
+func (l *LoginView) performLogin() tea.Cmd {
+	return func() tea.Msg {
+		resp, err := l.apiClient.Login(l.username, l.password)
+		if err != nil {
+			return LoginErrorMsg{Error: err.Error()}
+		}
+		return LoginSuccessMsg{User: &resp.User}
+	}
 }

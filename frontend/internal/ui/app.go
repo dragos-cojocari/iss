@@ -1,30 +1,47 @@
 package ui
 
 import (
+	"os"
+
+	"github.com/bork/frontend/internal/api"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 // App represents the main application model
 type App struct {
-	currentView View
-	loginView   *LoginView
-	width       int
-	height      int
+	currentView   ViewType
+	apiClient     *api.Client
+	loginView     *LoginView
+	overdueView   *OverdueView
+	dashboardView *DashboardView
+	currentUser   *api.UserInfo
+	width         int
+	height        int
 }
 
-// View represents different screens in the application
-type View int
+// ViewType represents different screens in the application
+type ViewType int
 
 const (
-	LoginViewType View = iota
-	// Future views: DashboardView, BrowseBooksView, etc.
+	LoginViewType ViewType = iota
+	OverdueViewType
+	DashboardViewType
 )
 
 // NewApp creates a new application instance
 func NewApp() *App {
+	// Get backend URL from environment or use default
+	backendURL := os.Getenv("BORK_BACKEND_URL")
+	if backendURL == "" {
+		backendURL = "http://localhost:8080"
+	}
+
+	apiClient := api.NewClient(backendURL)
+
 	return &App{
 		currentView: LoginViewType,
-		loginView:   NewLoginView(),
+		apiClient:   apiClient,
+		loginView:   NewLoginView(apiClient),
 	}
 }
 
@@ -43,20 +60,58 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "esc":
+		case "ctrl+c":
 			return a, tea.Quit
+		case "esc":
+			// Only quit from login screen
+			if a.currentView == LoginViewType {
+				return a, tea.Quit
+			}
 		}
+
+	case LoginSuccessMsg:
+		// Transition from login to overdue alert
+		a.currentUser = msg.User
+		a.overdueView = NewOverdueView()
+		a.currentView = OverdueViewType
+		return a, a.overdueView.Init()
+
+	case OverdueAcknowledgedMsg:
+		// Transition from overdue to dashboard
+		a.dashboardView = NewDashboardView(a.apiClient, a.currentUser)
+		a.currentView = DashboardViewType
+		return a, a.dashboardView.Init()
+
+	case LogoutMsg:
+		// Transition back to login
+		a.currentUser = nil
+		a.loginView = NewLoginView(a.apiClient)
+		a.dashboardView = nil
+		a.overdueView = nil
+		a.currentView = LoginViewType
+		return a, a.loginView.Init()
 	}
 
 	// Delegate to current view
+	var cmd tea.Cmd
 	switch a.currentView {
 	case LoginViewType:
-		updatedView, cmd := a.loginView.Update(msg)
+		var updatedView tea.Model
+		updatedView, cmd = a.loginView.Update(msg)
 		a.loginView = updatedView.(*LoginView)
-		return a, cmd
+
+	case OverdueViewType:
+		var updatedView tea.Model
+		updatedView, cmd = a.overdueView.Update(msg)
+		a.overdueView = updatedView.(*OverdueView)
+
+	case DashboardViewType:
+		var updatedView tea.Model
+		updatedView, cmd = a.dashboardView.Update(msg)
+		a.dashboardView = updatedView.(*DashboardView)
 	}
 
-	return a, nil
+	return a, cmd
 }
 
 // View renders the application
@@ -64,6 +119,10 @@ func (a *App) View() string {
 	switch a.currentView {
 	case LoginViewType:
 		return a.loginView.View()
+	case OverdueViewType:
+		return a.overdueView.View()
+	case DashboardViewType:
+		return a.dashboardView.View()
 	default:
 		return "Unknown view"
 	}
