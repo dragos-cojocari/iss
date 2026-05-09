@@ -14,15 +14,23 @@ Terminal User Interface (TUI) for the BORK (Book Organization & Rental Kiosk) li
 ```
 frontend/
 ├── cmd/
-│   └── bork-tui/
+│   └── bork/
 │       └── main.go              # Application entry point
 ├── internal/
 │   ├── ui/
 │   │   ├── app.go               # Main application model
 │   │   ├── login.go             # Login screen
-│   │   └── ...                  # Future screens
-│   ├── api/                     # API client (future)
-│   └── config/                  # Configuration (future)
+│   │   ├── overdue.go           # Overdue alert screen
+│   │   ├── dashboard.go         # Main dashboard
+│   │   ├── browse.go            # Browse books screen
+│   │   ├── theme.go             # Matrix theme colors
+│   │   └── quotes.go            # Quote manager
+│   └── api/
+│       ├── client.go            # HTTP client with cookies
+│       ├── auth.go              # Authentication API
+│       ├── books.go             # Books API
+│       └── types.go             # API DTOs
+├── quotes.txt                   # Matrix movie quotes
 ├── go.mod                       # Go module definition
 ├── go.sum                       # Dependency checksums
 ├── Dockerfile                   # Container image
@@ -47,63 +55,115 @@ go mod download
 ### 2. Run Application
 
 ```bash
-go run cmd/bork-tui/main.go
+go run cmd/bork/main.go
 ```
 
 Or build and run:
 
 ```bash
-go build -o bork-tui cmd/bork-tui/main.go
-./bork-tui
+go build -o bork cmd/bork/main.go
+./bork
 ```
 
 ## Building
 
 ```bash
 # Build for current platform
-go build -o bork-tui cmd/bork-tui/main.go
+go build -o bork cmd/bork/main.go
 
 # Build for Linux
-GOOS=linux GOARCH=amd64 go build -o bork-tui-linux cmd/bork-tui/main.go
+GOOS=linux GOARCH=amd64 go build -o bork-linux cmd/bork/main.go
 
 # Build for macOS
-GOOS=darwin GOARCH=amd64 go build -o bork-tui-macos cmd/bork-tui/main.go
+GOOS=darwin GOARCH=amd64 go build -o bork-macos cmd/bork/main.go
 
 # Build for Windows
-GOOS=windows GOARCH=amd64 go build -o bork-tui.exe cmd/bork-tui/main.go
+GOOS=windows GOARCH=amd64 go build -o bork.exe cmd/bork/main.go
 
 # Build Docker image
 docker build -t bork-frontend:latest .
 ```
 
-## Features (Current)
+## Features
 
-### Login Screen
+### Matrix Theme
 
-- ASCII art logo
-- Username input field
-- Password input field (masked)
-- Tab navigation between fields
-- Visual focus indicators
-- Keyboard shortcuts
+- **Green-on-black aesthetic** inspired by The Matrix movie
+- **Cycling quotes** from the movie (20 quotes total)
+- **Neon highlights** for focused elements
+- **Consistent styling** across all views
+
+### Implemented Screens
+
+#### 1. Login Screen
+
+- Matrix-style ASCII logo with digital rain characters
+- Username and password fields (masked)
+- Tab navigation with visual focus indicators
+- Enhanced button focus with neon border
+- API integration with session cookies
+
+#### 2. Overdue Alert Screen
+
+- Displays overdue book notifications (currently dummy)
+- Clear "All Clear" message when no overdue books
+- Prominent Continue button
+
+#### 3. Main Dashboard
+
+- Current rentals display (0/3)
+- Menu with 4 options:
+  - Browse Books
+  - My Rentals (future)
+  - Return Books (future)
+  - Logout
+- Matrix quote that cycles on each visit
+- Right-aligned username in header
+
+#### 4. Browse Books Screen
+
+- Paginated book list (4 books per page)
+- Book details: title, author, category, ISBN, availability
+- Navigation: ↑/↓ to select, ←/→ to change pages
+- Quote cycles on page navigation
+- Refresh functionality (R key)
 
 ### Keyboard Controls
 
-- `Tab` / `Down Arrow` - Next field
-- `Shift+Tab` / `Up Arrow` - Previous field
+**Login Screen:**
+
+- `Tab` / `↓` - Next field
+- `Shift+Tab` / `↑` - Previous field
 - `Enter` - Submit / Next field
-- `Backspace` - Delete character
-- `Esc` / `Ctrl+C` - Exit application
+- `Esc` / `Ctrl+C` - Exit
+
+**Dashboard:**
+
+- `↑` / `↓` / `j` / `k` - Navigate menu
+- `Enter` - Select menu item
+- `Esc` - Logout and exit
+
+**Browse Books:**
+
+- `↑` / `↓` / `j` / `k` - Navigate books
+- `←` / `→` / `h` / `l` / `PgUp` / `PgDn` - Change pages
+- `R` - Refresh book list
+- `B` / `Backspace` - Back to dashboard
+- `Esc` - Back to dashboard
+
+### Session Management
+
+- Automatic logout on exit (Ctrl+C or Esc from dashboard)
+- Session cookies managed transparently
+- 30-minute session expiration
 
 ## Features (Future)
 
-- [ ] API integration with backend
-- [ ] Main dashboard
-- [ ] Browse books screen
-- [ ] Shopping cart
-- [ ] Rental management
-- [ ] Overdue notifications
-- [ ] Configuration file support
+- [ ] My Rentals screen
+- [ ] Return Books functionality
+- [ ] Shopping cart for multiple rentals
+- [ ] Search and filter books
+- [ ] User profile management
 
 ## Development
 
