@@ -2,6 +2,11 @@ spring:
   application:
     name: bork-backend
 
+  mvc:
+    contentnegotiation:
+      favor-parameter: false
+      favor-path-extension: false
+
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${POSTGRES_DB:bork_db}
     username: ${POSTGRES_USER:bork_user}

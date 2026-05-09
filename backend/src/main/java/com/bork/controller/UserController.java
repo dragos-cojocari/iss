@@ -14,7 +14,7 @@ import java.util.UUID;
  * Provides endpoints for user management (testing only)
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(value = "/api/users", produces = "application/json")
 public class UserController {
 
     @Autowired

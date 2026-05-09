@@ -16,6 +16,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +31,11 @@ import java.util.UUID;
  * Handles login, logout, and session management
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(value = "/api/auth", produces = "application/json")
 @Tag(name = "Authentication", description = "User authentication and session management endpoints")
 public class AuthController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private static final String SESSION_COOKIE_NAME = "BORK_SESSION";
     private static final int COOKIE_MAX_AGE = 30 * 60;
 
@@ -57,7 +60,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Invalid credentials"),
             @ApiResponse(responseCode = "403", description = "Account locked (3 failed attempts)")
     })
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest loginRequest,
             HttpServletResponse response) {
@@ -134,12 +137,15 @@ public class AuthController {
     @SecurityRequirement(name = "cookieAuth")
     @GetMapping("/me")
     public ResponseEntity<LoginResponse.UserInfo> getCurrentUser(HttpServletRequest request) {
-        UUID sessionId = getSessionIdFromRequest(request);
-        if (sessionId == null) {
+        // User is already validated and set by SessionAuthenticationFilter
+        User user = (User) request.getAttribute("user");
+
+        if (user == null) {
+            logger.warn("GET /api/auth/me - No user in request attributes");
             return ResponseEntity.status(401).build();
         }
 
-        User user = authenticationService.getUserFromSession(sessionId);
+        logger.info("GET /api/auth/me - User: {}", user.getUsername());
         return ResponseEntity.ok(new LoginResponse.UserInfo(user));
     }
 

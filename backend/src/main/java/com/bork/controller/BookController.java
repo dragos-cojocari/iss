@@ -22,7 +22,7 @@ import java.util.UUID;
  * Provides endpoints for browsing and searching books
  */
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping(value = "/api/books", produces = "application/json")
 @Tag(name = "Books", description = "Book browsing and search endpoints")
 @SecurityRequirement(name = "cookieAuth")
 public class BookController {

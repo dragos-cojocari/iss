@@ -15,7 +15,7 @@ import java.util.Map;
  * Health check endpoint for monitoring application and database status
  */
 @RestController
-@RequestMapping("/api/health")
+@RequestMapping(value = "/api/health", produces = "application/json")
 public class HealthController {
 
     @Autowired

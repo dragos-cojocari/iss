@@ -76,7 +76,7 @@ public class AuthenticationService {
      */
     @Transactional
     public Session validateSession(UUID sessionId) {
-        Session session = sessionRepository.findActiveSession(sessionId, LocalDateTime.now())
+        Session session = sessionRepository.findActiveSessionWithUser(sessionId, LocalDateTime.now())
                 .orElseThrow(() -> new SessionExpiredException());
 
         session.refresh();
@@ -105,7 +105,7 @@ public class AuthenticationService {
      */
     @Transactional(readOnly = true)
     public User getUserFromSession(UUID sessionId) {
-        Session session = sessionRepository.findActiveSession(sessionId, LocalDateTime.now())
+        Session session = sessionRepository.findActiveSessionWithUser(sessionId, LocalDateTime.now())
                 .orElseThrow(() -> new SessionExpiredException());
 
         return session.getUser();
