@@ -33,6 +33,10 @@ Design documents, diagrams, and specifications:
 
 - [Use Case Template](./design/%5BISS%202025-2026%5D%20Use%20case%20template.docx) - Cockburn template
 
+### Lab Assignments
+
+- [Lab Assignments](./design/lab_assignments.md) - Timeline of deliverables and submissions
+
 ## About BORK
 
 BORK (Book Organization & Rental Kiosk) is a library management system designed for university use.
