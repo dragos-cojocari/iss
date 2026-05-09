@@ -9,14 +9,15 @@ import (
 
 // App represents the main application model
 type App struct {
-	currentView   ViewType
-	apiClient     *api.Client
-	loginView     *LoginView
-	overdueView   *OverdueView
-	dashboardView *DashboardView
-	currentUser   *api.UserInfo
-	width         int
-	height        int
+	currentView     ViewType
+	apiClient       *api.Client
+	loginView       *LoginView
+	overdueView     *OverdueView
+	dashboardView   *DashboardView
+	browseBooksView *BrowseBooksView
+	currentUser     *api.UserInfo
+	width           int
+	height          int
 }
 
 // ViewType represents different screens in the application
@@ -26,6 +27,7 @@ const (
 	LoginViewType ViewType = iota
 	OverdueViewType
 	DashboardViewType
+	BrowseBooksViewType
 )
 
 // NewApp creates a new application instance
@@ -60,13 +62,8 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c":
+		case "ctrl+c", "esc":
 			return a, tea.Quit
-		case "esc":
-			// Only quit from login screen
-			if a.currentView == LoginViewType {
-				return a, tea.Quit
-			}
 		}
 
 	case LoginSuccessMsg:
@@ -82,12 +79,24 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		a.currentView = DashboardViewType
 		return a, a.dashboardView.Init()
 
+	case BrowseBooksMsg:
+		// Transition from dashboard to browse books
+		a.browseBooksView = NewBrowseBooksView(a.apiClient, a.currentUser)
+		a.currentView = BrowseBooksViewType
+		return a, a.browseBooksView.Init()
+
+	case BackToDashboardMsg:
+		// Transition back to dashboard from browse books
+		a.currentView = DashboardViewType
+		return a, nil
+
 	case LogoutMsg:
 		// Transition back to login
 		a.currentUser = nil
 		a.loginView = NewLoginView(a.apiClient)
 		a.dashboardView = nil
 		a.overdueView = nil
+		a.browseBooksView = nil
 		a.currentView = LoginViewType
 		return a, a.loginView.Init()
 	}
@@ -109,6 +118,11 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		var updatedView tea.Model
 		updatedView, cmd = a.dashboardView.Update(msg)
 		a.dashboardView = updatedView.(*DashboardView)
+
+	case BrowseBooksViewType:
+		var updatedView tea.Model
+		updatedView, cmd = a.browseBooksView.Update(msg)
+		a.browseBooksView = updatedView.(*BrowseBooksView)
 	}
 
 	return a, cmd
@@ -123,6 +137,8 @@ func (a *App) View() string {
 		return a.overdueView.View()
 	case DashboardViewType:
 		return a.dashboardView.View()
+	case BrowseBooksViewType:
+		return a.browseBooksView.View()
 	default:
 		return "Unknown view"
 	}

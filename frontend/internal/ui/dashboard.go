@@ -12,24 +12,14 @@ import (
 // LogoutMsg is sent when user logs out
 type LogoutMsg struct{}
 
-// BooksLoadedMsg is sent when books are loaded
-type BooksLoadedMsg struct {
-	Books []api.Book
-}
-
-// BooksErrorMsg is sent when books fail to load
-type BooksErrorMsg struct {
-	Error string
-}
+// BrowseBooksMsg is sent when user selects Browse Books
+type BrowseBooksMsg struct{}
 
 // DashboardView represents the main dashboard
 type DashboardView struct {
 	apiClient    *api.Client
 	user         *api.UserInfo
-	books        []api.Book
 	selectedMenu int
-	isLoading    bool
-	errorMsg     string
 }
 
 // NewDashboardView creates a new dashboard view
@@ -37,52 +27,66 @@ func NewDashboardView(apiClient *api.Client, user *api.UserInfo) *DashboardView 
 	return &DashboardView{
 		apiClient:    apiClient,
 		user:         user,
-		books:        []api.Book{},
 		selectedMenu: 0,
-		isLoading:    true,
 	}
 }
 
 // Init initializes the dashboard view
 func (d *DashboardView) Init() tea.Cmd {
-	return d.loadBooks()
+	return nil
 }
 
 // Update handles messages for the dashboard view
 func (d *DashboardView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case BooksLoadedMsg:
-		d.isLoading = false
-		d.books = msg.Books
-		return d, nil
-
-	case BooksErrorMsg:
-		d.isLoading = false
-		d.errorMsg = msg.Error
-		return d, nil
-
 	case tea.KeyMsg:
 		switch msg.String() {
+		case "up", "k":
+			if d.selectedMenu > 0 {
+				d.selectedMenu--
+			}
+			return d, nil
+
+		case "down", "j":
+			if d.selectedMenu < 3 {
+				d.selectedMenu++
+			}
+			return d, nil
+
 		case "1":
 			d.selectedMenu = 0
-			return d, nil
+			return d, func() tea.Msg {
+				return BrowseBooksMsg{}
+			}
+
 		case "2":
 			d.selectedMenu = 1
 			return d, nil
+
 		case "3":
 			d.selectedMenu = 2
 			return d, nil
+
 		case "4":
-			// Logout
+			d.selectedMenu = 3
 			return d, func() tea.Msg {
 				d.apiClient.Logout()
 				return LogoutMsg{}
 			}
-		case "r":
-			// Refresh books
-			d.isLoading = true
-			d.errorMsg = ""
-			return d, d.loadBooks()
+
+		case "enter":
+			// Execute selected menu item
+			if d.selectedMenu == 0 {
+				return d, func() tea.Msg {
+					return BrowseBooksMsg{}
+				}
+			} else if d.selectedMenu == 3 {
+				return d, func() tea.Msg {
+					d.apiClient.Logout()
+					return LogoutMsg{}
+				}
+			}
+			return d, nil
 		}
 	}
 
@@ -110,17 +114,6 @@ func (d *DashboardView) View() string {
 	selectedMenuStyle := menuItemStyle.Copy().
 		Foreground(lipgloss.Color("#00BFFF")).
 		Bold(true)
-
-	bookStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFFFF")).
-		MarginBottom(1)
-
-	availableStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#4CAF50")).
-		Bold(true)
-
-	rentedStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FF6B6B"))
 
 	helpStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#666666")).
@@ -171,74 +164,12 @@ func (d *DashboardView) View() string {
 	}
 
 	view.WriteString(boxStyle.Render(menuContent.String()))
-	view.WriteString("\n\n")
-
-	// Available Books
-	var booksContent strings.Builder
-	booksContent.WriteString(lipgloss.NewStyle().Bold(true).Render("AVAILABLE BOOKS"))
-	booksContent.WriteString("\n\n")
-
-	if d.isLoading {
-		booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#FFB74D")).Render("Loading books..."))
-	} else if d.errorMsg != "" {
-		booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF6B6B")).Render("Error: " + d.errorMsg))
-	} else if len(d.books) == 0 {
-		booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#666666")).Render("No books available"))
-	} else {
-		// Display first 5 books
-		displayCount := len(d.books)
-		if displayCount > 5 {
-			displayCount = 5
-		}
-
-		for i := 0; i < displayCount; i++ {
-			book := d.books[i]
-			status := "[RENTED]"
-			statusStyle := rentedStyle
-			if book.IsAvailable {
-				status = "[AVAILABLE]"
-				statusStyle = availableStyle
-			}
-
-			bookLine := fmt.Sprintf("📖 %s", book.Title)
-			booksContent.WriteString(bookStyle.Render(bookLine))
-			booksContent.WriteString(" ")
-			booksContent.WriteString(statusStyle.Render(status))
-			booksContent.WriteString("\n")
-
-			authorLine := fmt.Sprintf("   Author: %s", book.Author)
-			booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#999999")).Render(authorLine))
-			booksContent.WriteString("\n")
-
-			categoryLine := fmt.Sprintf("   Category: %s", book.Category.Name)
-			booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#999999")).Render(categoryLine))
-			booksContent.WriteString("\n\n")
-		}
-
-		if len(d.books) > 5 {
-			moreText := fmt.Sprintf("... and %d more books", len(d.books)-5)
-			booksContent.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#666666")).Italic(true).Render(moreText))
-		}
-	}
-
-	view.WriteString(boxStyle.Render(booksContent.String()))
 	view.WriteString("\n")
 
 	// Help
-	view.WriteString(helpStyle.Render("1-4: Select Option | R: Refresh | Esc: Exit"))
+	view.WriteString(helpStyle.Render("↑/↓: Navigate | Enter/1-4: Select | Esc: Exit"))
 
 	return lipgloss.NewStyle().
 		Padding(1, 2).
 		Render(view.String())
-}
-
-// loadBooks loads available books from the API
-func (d *DashboardView) loadBooks() tea.Cmd {
-	return func() tea.Msg {
-		books, err := d.apiClient.GetAvailableBooks()
-		if err != nil {
-			return BooksErrorMsg{Error: err.Error()}
-		}
-		return BooksLoadedMsg{Books: books}
-	}
 }

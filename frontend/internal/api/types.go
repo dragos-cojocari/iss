@@ -1,7 +1,5 @@
 package api
 
-import "time"
-
 // LoginRequest represents the login request payload
 type LoginRequest struct {
 	Username string `json:"username"`
@@ -25,21 +23,21 @@ type UserInfo struct {
 
 // Book represents a book in the library
 type Book struct {
-	BookID      string    `json:"bookId"`
-	Title       string    `json:"title"`
-	Author      string    `json:"author"`
-	ISBN        string    `json:"isbn"`
-	Category    Category  `json:"category"`
-	IsAvailable bool      `json:"isAvailable"`
-	AddedAt     time.Time `json:"addedAt"`
+	BookID      string   `json:"bookId"`
+	Title       string   `json:"title"`
+	Author      string   `json:"author"`
+	ISBN        string   `json:"isbn"`
+	Category    Category `json:"category"`
+	IsAvailable bool     `json:"isAvailable"`
+	AddedAt     string   `json:"addedAt"` // Keep as string to avoid parsing issues
 }
 
 // Category represents a book category
 type Category struct {
-	CategoryID  string    `json:"categoryId"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	CreatedAt   time.Time `json:"createdAt"`
+	CategoryID  string `json:"categoryId"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	CreatedAt   string `json:"createdAt"` // Keep as string to avoid parsing issues
 }
 
 // ErrorResponse represents an API error response
