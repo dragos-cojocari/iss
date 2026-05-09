@@ -104,18 +104,26 @@ mvn test -Dtest=HealthControllerTest
 
 ## API Endpoints
 
-### Health Check
+### Health Check (Public)
 
 - **GET** `/api/health` - Application and database health status
 
-### Books
+### Authentication (Public)
+
+- **POST** `/api/auth/login` - Login with username and password
+  - Request body: `{"username": "student1", "password": "Test123!"}`
+  - Returns session cookie and user info
+- **POST** `/api/auth/logout` - Logout and invalidate session
+- **GET** `/api/auth/me` - Get current authenticated user info
+
+### Books (Protected)
 
 - **GET** `/api/books` - Get all books
 - **GET** `/api/books/available` - Get available books only
 - **GET** `/api/books/{id}` - Get book by ID (UUID)
 - **GET** `/api/books/search?q={term}` - Search books by title or author
 
-### Users (Testing)
+### Users (Protected - Testing)
 
 - **GET** `/api/users` - Get all users
 - **GET** `/api/users/{id}` - Get user by ID (UUID)
@@ -123,8 +131,6 @@ mvn test -Dtest=HealthControllerTest
 
 ### Future Endpoints
 
-- `/api/auth/login` - User authentication
-- `/api/auth/logout` - User logout
 - `/api/rentals` - Rental management
 - `/api/cart` - Shopping cart operations
 - `/api/categories` - Category management

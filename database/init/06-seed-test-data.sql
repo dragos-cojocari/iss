@@ -4,13 +4,13 @@
 
 -- Test Users
 -- Password for all test users: Test123!
--- BCrypt hash: $2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYIpSVWrKFS
+-- BCrypt hash generated with cost factor 12
 INSERT INTO users (username, email, first_name, last_name, password_hash) VALUES
-    ('student1', 'student1@university.edu', 'Alice', 'Johnson', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYIpSVWrKFS'),
-    ('student2', 'student2@university.edu', 'Bob', 'Smith', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYIpSVWrKFS'),
-    ('student3', 'student3@university.edu', 'Carol', 'Williams', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYIpSVWrKFS'),
-    ('jdoe', 'john.doe@university.edu', 'John', 'Doe', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYIpSVWrKFS'),
-    ('testuser', 'test@university.edu', 'Test', 'User', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYIpSVWrKFS');
+    ('student1', 'student1@university.edu', 'Alice', 'Johnson', '$2a$12$npQ4eUifBcveY3V3nm3p7O7HoTPwE/b8zJF29X7nnstARkmxPGL8q'),
+    ('student2', 'student2@university.edu', 'Bob', 'Smith', '$2a$12$npQ4eUifBcveY3V3nm3p7O7HoTPwE/b8zJF29X7nnstARkmxPGL8q'),
+    ('student3', 'student3@university.edu', 'Carol', 'Williams', '$2a$12$npQ4eUifBcveY3V3nm3p7O7HoTPwE/b8zJF29X7nnstARkmxPGL8q'),
+    ('jdoe', 'john.doe@university.edu', 'John', 'Doe', '$2a$12$npQ4eUifBcveY3V3nm3p7O7HoTPwE/b8zJF29X7nnstARkmxPGL8q'),
+    ('testuser', 'test@university.edu', 'Test', 'User', '$2a$12$npQ4eUifBcveY3V3nm3p7O7HoTPwE/b8zJF29X7nnstARkmxPGL8q');
 
 -- Test Books
 -- Get category IDs for foreign keys
