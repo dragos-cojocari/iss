@@ -898,10 +898,48 @@ This indicates an iterative, refinement-focused workflow where initial tasks oft
 
 ### Session 7 Summary
 
-- **Total Tasks**: 2
+- **Total Tasks**: 3
 - **Files Created**: 1 (`.windsurf/rules/documentation.md`)
 - **Files Modified**: 1 (`docs/build.md`)
-- **Impact**: Documentation will stay in sync with code changes going forward; build docs now reflect the CI/CD path filtering setup.
+- **Impact**: Documentation will stay in sync with code changes going forward; build docs now reflect the CI/CD path filtering setup. AI Contributions rule updated to log incrementally.
+
+---
+
+### 3. Update AI Contributions Rule to Log Incrementally
+
+**Request**: Keep the AI Contributions log current after each task rather than only at conversation end. Update the rule.
+
+**Complexity**: Low
+**Follow-up**: Yes (refines logging rule)
+**Analysis**:
+
+- Changed `.windsurf/rules/ai-contributions.md` from "end of every conversation" to "after each completed task"
+
+**Missing/Suggestions**: None.
+
+---
+
+### 4. Fix Stale Environment Variable in .env.example and Docs
+
+**Request**: `BORK_BACKEND_URL` is missing from `.env.example`; `API_BASE_URL` is referenced but no longer used in code.
+
+**Complexity**: Low
+**Follow-up**: No
+**Analysis**:
+
+- Verified `BORK_BACKEND_URL` is the actual env var used in `frontend/internal/ui/app.go` and `docker-compose.yml`
+- Confirmed `API_BASE_URL` has zero code references — only appeared in `.env.example` and `frontend/README.md`
+- Replaced `API_BASE_URL` with `BORK_BACKEND_URL` in `.env.example` (also fixed URL: removed `/api` suffix to match code)
+- Fixed `frontend/README.md` Docker example to use `BORK_BACKEND_URL`
+
+**Missing/Suggestions**: None.
+
+### Updated Session 7 Summary
+
+- **Total Tasks**: 4
+- **Files Created**: 1 (`.windsurf/rules/documentation.md`)
+- **Files Modified**: 4 (`docs/build.md`, `.windsurf/rules/ai-contributions.md`, `.env.example`, `frontend/README.md`)
+- **Impact**: Documentation stays in sync; stale env var references cleaned up across the project.
 
 ---
 
@@ -912,24 +950,24 @@ This indicates an iterative, refinement-focused workflow where initial tasks oft
 ### Total Metrics
 
 - **Sessions**: 7
-- **Total Duration**: ~4.4 hours
-- **Total Tasks**: 27
+- **Total Duration**: ~4.5 hours
+- **Total Tasks**: 29
 - **Files Created**: 12+ (tests, configs, documentation, rules)
-- **Files Modified**: 18+ (code, configs, docs)
+- **Files Modified**: 20+ (code, configs, docs)
 
 ### Task Complexity Breakdown
 
 - **High Complexity**: 2 (7%)
   - Backend unit tests
   - Dockerfile production optimization
-- **Medium Complexity**: 7 (26%)
+- **Medium Complexity**: 7 (24%)
   - CI/CD setup
   - Frontend tests
   - Security hardening
   - Documentation reviews
   - Swagger configuration
   - CI/CD path-based filtering
-- **Low Complexity**: 18 (67%)
+- **Low Complexity**: 20 (69%)
   - Bug fixes
   - Configuration changes
   - Documentation linking
@@ -938,12 +976,14 @@ This indicates an iterative, refinement-focused workflow where initial tasks oft
   - Rules inquiry
   - Documentation sync rule
   - Build docs update
+  - Incremental logging rule update
+  - Stale env var cleanup
 
 ### Follow-up Pattern
 
-- **Independent Tasks**: 10 (37%)
-- **Follow-up Tasks**: 17 (63%)
-- **Average Follow-ups per Session**: 2.4
+- **Independent Tasks**: 10 (34%)
+- **Follow-up Tasks**: 19 (66%)
+- **Average Follow-ups per Session**: 2.7
 
 This indicates an iterative, refinement-focused workflow where initial tasks often led to natural improvements and enhancements.
 
