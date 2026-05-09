@@ -49,6 +49,21 @@ BORK is a simplified library management system with:
 
 ## 🚀 Quick Start
 
+See [QUICKSTART.md](QUICKSTART.md) for detailed setup instructions.
+
+### 📖 Interactive API Documentation
+
+Once the backend is running, access the interactive Swagger UI at:
+
+**http://localhost:8080/swagger-ui.html**
+
+Features:
+
+- 🔍 Browse all API endpoints
+- 🧪 Test endpoints directly in the browser
+- 📝 View request/response schemas
+- 🔐 Authenticate and test protected endpoints
+
 ### Prerequisites
 
 - **Docker** and **Docker Compose**
@@ -191,16 +206,17 @@ make db-connect
 docker exec -it bork-db psql -U bork_user -d bork_db
 ```
 
-## 📖 Documentation
+## � Documentation
 
-All functional specifications and technical documentation can be found in [docs/](./docs/index.md):
+Comprehensive documentation is available in the `docs/` directory:
 
-- [Specification](./docs/specification.md) - Functional requirements
-- [Non-Functional Requirements](./docs/nfr.md) - Quality attributes
-- [Use Case Diagram](./docs/usecase_diagram.md) - UML use cases
-- [Class Diagram](./docs/class_diagram.md) - Conceptual model
-- [Sequence Diagrams](./docs/sd_login.md) - Login and rental flows
-- [TUI Prototype](./docs/tui_prototype.md) - UI mockups
+- [API Guide](docs/api_guide.md) - **REST API documentation with curl examples**
+- [Project Specification](docs/specification.md) - Requirements and features
+- [Use Case Diagram](docs/usecase_diagram.md) - System actors and use cases
+- [Class Diagram](docs/class_diagram.md) - Domain model and relationships
+- [Sequence Diagrams](docs/sd_login.md) - Login and rental workflows
+- [TUI Prototype](docs/tui_prototype.md) - Frontend design mockups
+- [Non-Functional Requirements](docs/nfr.md) - Performance, security, and quality attributes
 
 ## 🧪 Testing
 

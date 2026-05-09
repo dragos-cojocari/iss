@@ -118,3 +118,9 @@ docker-compose.override.yml
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# ============================================
+# Testing & Development
+# ============================================
+cookies.txt
+*.cookie

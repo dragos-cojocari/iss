@@ -30,7 +30,10 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
             "/api/auth/login",
             "/api/health",
             "/api/test",
-            "/error"
+            "/error",
+            "/swagger-ui",
+            "/v3/api-docs",
+            "/swagger-resources"
     );
 
     @Autowired

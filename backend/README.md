@@ -102,6 +102,27 @@ mvn test
 mvn test -Dtest=HealthControllerTest
 ```
 
+## Interactive API Documentation
+
+The BORK API includes interactive Swagger UI documentation:
+
+**URL:** http://localhost:8080/swagger-ui.html
+
+### Features
+
+- **Try It Out**: Test endpoints directly in the browser
+- **Authentication**: Login and use session cookies for protected endpoints
+- **Schema Validation**: View request/response models
+- **OpenAPI Spec**: Export OpenAPI JSON/YAML for client generation
+
+### OpenAPI Endpoints
+
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
+- **OpenAPI YAML**: http://localhost:8080/v3/api-docs.yaml
+
+---
+
 ## API Endpoints
 
 ### Health Check (Public)

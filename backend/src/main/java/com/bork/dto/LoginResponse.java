@@ -1,15 +1,20 @@
 package com.bork.dto;
 
 import com.bork.model.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.UUID;
 
 /**
  * DTO for login response
  */
+@Schema(description = "Login response with session ID and user information")
 public class LoginResponse {
 
+    @Schema(description = "Session UUID (also set as cookie)")
     private UUID sessionId;
+
+    @Schema(description = "User information")
     private UserInfo user;
 
     public LoginResponse() {

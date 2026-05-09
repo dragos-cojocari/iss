@@ -2,6 +2,10 @@
 
 ## Project Documentation
 
+### API & Development
+
+- [API Guide](./api_guide.md) - REST API documentation with curl examples
+
 ### Requirements & Specifications
 
 - [Specification](./specification.md) - Functional specifications and project requirements

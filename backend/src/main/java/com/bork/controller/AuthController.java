@@ -5,6 +5,13 @@ import com.bork.dto.LoginResponse;
 import com.bork.model.Session;
 import com.bork.model.User;
 import com.bork.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,6 +30,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "User authentication and session management endpoints")
 public class AuthController {
 
     private static final String SESSION_COOKIE_NAME = "BORK_SESSION";
@@ -39,6 +47,16 @@ public class AuthController {
      * @param response HTTP response to set cookie
      * @return Login response with session ID and user info
      */
+    @Operation(
+            summary = "User login",
+            description = "Authenticate with username and password. Returns session cookie and user information."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful",
+                    content = @Content(schema = @Schema(implementation = LoginResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials"),
+            @ApiResponse(responseCode = "403", description = "Account locked (3 failed attempts)")
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest loginRequest,
@@ -67,6 +85,15 @@ public class AuthController {
      * @param response HTTP response to clear cookie
      * @return Success message
      */
+    @Operation(
+            summary = "User logout",
+            description = "Invalidate current session and clear session cookie."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logout successful"),
+            @ApiResponse(responseCode = "401", description = "No valid session")
+    })
+    @SecurityRequirement(name = "cookieAuth")
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(
             HttpServletRequest request,
@@ -95,6 +122,16 @@ public class AuthController {
      * @param request HTTP request to get session cookie
      * @return Current user information
      */
+    @Operation(
+            summary = "Get current user",
+            description = "Get information about the currently authenticated user."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User information retrieved",
+                    content = @Content(schema = @Schema(implementation = LoginResponse.UserInfo.class))),
+            @ApiResponse(responseCode = "401", description = "Not authenticated")
+    })
+    @SecurityRequirement(name = "cookieAuth")
     @GetMapping("/me")
     public ResponseEntity<LoginResponse.UserInfo> getCurrentUser(HttpServletRequest request) {
         UUID sessionId = getSessionIdFromRequest(request);
