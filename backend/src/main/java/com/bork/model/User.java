@@ -1,5 +1,8 @@
 package com.bork.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +26,8 @@ import java.util.UUID;
     @Index(name = "idx_users_email", columnList = "email"),
     @Index(name = "idx_users_is_locked", columnList = "is_locked")
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Schema(description = "User entity representing a library system user")
 public class User {
 
     @Id
@@ -37,6 +42,8 @@ public class User {
 
     @NotBlank(message = "Password hash is required")
     @Column(name = "password_hash", nullable = false)
+    @JsonIgnore
+    @Schema(hidden = true)
     private String passwordHash;
 
     @NotBlank(message = "Email is required")

@@ -1,5 +1,7 @@
 package com.bork.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -25,6 +27,8 @@ import java.util.UUID;
     @Index(name = "idx_books_category_id", columnList = "category_id"),
     @Index(name = "idx_books_is_available", columnList = "is_available")
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Schema(description = "Book entity representing a book in the library")
 public class Book {
 
     @Id
@@ -44,10 +48,12 @@ public class Book {
 
     @Pattern(regexp = "^\\d{13}$", message = "ISBN must be 13 digits")
     @Column(name = "isbn", unique = true, length = 13)
+    @Schema(description = "ISBN-13 number", example = "9780743273565", pattern = "^\\d{13}$")
     private String isbn;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "fk_books_category"))
+    @Schema(description = "Book category")
     private Category category;
 
     @Column(name = "is_available", nullable = false)

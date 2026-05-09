@@ -67,8 +67,19 @@ dev-all:
 	@echo "   Terminal 2: make dev-backend"
 	@echo "   Terminal 3: make dev-frontend"
 
-# Docker - Build images
-docker-build:
+# Docker - Fetch images to workaround some config issues
+docker-fetch-images:
+	@echo "Fetching Docker images..."
+	@mkdir -p .docker-tmp && echo '{}' > .docker-tmp/config.json
+	@export DOCKER_CONFIG=.docker-tmp && docker pull postgres:16-alpine 2>/dev/null || true
+	@export DOCKER_CONFIG=.docker-tmp && docker pull maven:3.9-eclipse-temurin-25-alpine 2>/dev/null || true
+	@export DOCKER_CONFIG=.docker-tmp && docker pull eclipse-temurin:25-jre-alpine 2>/dev/null || true
+	@export DOCKER_CONFIG=.docker-tmp && docker pull golang:1.26.3-alpine 2>/dev/null || true
+	@export DOCKER_CONFIG=.docker-tmp && docker pull alpine:latest 2>/dev/null || true
+	docker compose build
+
+# Docker - Build images. Uncomment the line below if you get a creds helper error
+docker-build: # docker-fetch-images
 	@echo "Building Docker images..."
 	docker compose build
 

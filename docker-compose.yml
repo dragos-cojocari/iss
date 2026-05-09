@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # PostgreSQL Database
   db:
@@ -65,7 +63,7 @@ services:
       dockerfile: Dockerfile
     container_name: bork-frontend
     environment:
-      API_BASE_URL: http://backend:8080/api
+      BORK_BACKEND_URL: http://backend:8080
       TERM: xterm-256color
     stdin_open: true
     tty: true

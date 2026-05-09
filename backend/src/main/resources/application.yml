@@ -39,6 +39,7 @@ logging:
     org.springframework.web: INFO
     org.hibernate.SQL: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    org.springdoc: DEBUG
 
 springdoc:
   api-docs:
