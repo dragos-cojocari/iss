@@ -1,5 +1,6 @@
 # BORK - Book Organization & Rental Kiosk
 
+[![Build and Publish](https://github.com/dragos-cojocari/iss/actions/workflows/build-publish.yml/badge.svg?branch=main)](https://github.com/dragos-cojocari/iss/actions/workflows/build-publish.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://openjdk.org/projects/jdk/25/)
 [![Go](https://img.shields.io/badge/Go-1.26.3-00ADD8.svg)](https://go.dev/)
@@ -137,6 +138,7 @@ See [Documentation Index](docs/index.md) for complete documentation.
 
 - [Quick Start Guide](docs/quickstart.md) - Get running in under 5 minutes
 - [Development Guide](docs/development.md) - Setup, testing, Docker, configuration
+- [Build & Deployment Guide](docs/build.md) - Production-optimized Docker builds
 - [API Guide](docs/api_guide.md) - REST API reference with curl examples
 - [Design & Architecture](docs/design/) - Requirements, UML diagrams, UI prototypes
 

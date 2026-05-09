@@ -1,4 +1,4 @@
-.PHONY: help setup dev-db dev-backend dev-frontend dev-all docker-build docker-up docker-down docker-logs test-backend test-frontend clean
+.PHONY: help setup dev-db dev-backend dev-frontend dev-all docker-build docker-up docker-down docker-logs test-backend test-frontend lint-backend lint-frontend lint-all clean
 
 # Default target
 help:
@@ -16,6 +16,9 @@ help:
 	@echo "  docker-logs      - View Docker logs"
 	@echo "  test-backend     - Run backend tests"
 	@echo "  test-frontend    - Run frontend tests"
+	@echo "  lint-backend     - Lint backend code (Checkstyle)"
+	@echo "  lint-frontend    - Lint frontend code (golangci-lint)"
+	@echo "  lint-all         - Lint all code"
 	@echo "  clean            - Clean build artifacts"
 
 setup:
@@ -76,10 +79,11 @@ docker-fetch-images:
 	@export DOCKER_CONFIG=.docker-tmp && docker pull eclipse-temurin:25-jre-alpine 2>/dev/null || true
 	@export DOCKER_CONFIG=.docker-tmp && docker pull golang:1.26.3-alpine 2>/dev/null || true
 	@export DOCKER_CONFIG=.docker-tmp && docker pull alpine:latest 2>/dev/null || true
+	@export DOCKER_CONFIG=.docker-tmp && docker pull alpine:3.19 2>/dev/null || true
 	docker compose build
 
 # Docker - Build images. Uncomment the line below if you get a creds helper error
-docker-build: # docker-fetch-images
+docker-build: docker-fetch-images
 	@echo "Building Docker images..."
 	docker compose build
 
@@ -138,6 +142,19 @@ test-frontend:
 
 # Testing - All
 test-all: test-backend test-frontend
+
+# Linting - Backend (Java with Checkstyle)
+lint-backend:
+	@echo "Linting backend code with Checkstyle..."
+	cd backend && mvn checkstyle:check
+
+# Linting - Frontend (Go with golangci-lint)
+lint-frontend:
+	@echo "Linting frontend code with golangci-lint..."
+	cd frontend && golangci-lint run ./...
+
+# Linting - All
+lint-all: lint-backend lint-frontend
 
 # Clean - Build artifacts
 clean:

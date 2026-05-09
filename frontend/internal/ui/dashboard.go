@@ -72,19 +72,20 @@ func (d *DashboardView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "4":
 			d.selectedMenu = 3
 			return d, func() tea.Msg {
-				d.apiClient.Logout()
+				_ = d.apiClient.Logout()
 				return LogoutMsg{}
 			}
 
 		case "enter":
 			// Execute selected menu item
-			if d.selectedMenu == 0 {
+			switch d.selectedMenu {
+			case 0:
 				return d, func() tea.Msg {
 					return BrowseBooksMsg{}
 				}
-			} else if d.selectedMenu == 3 {
+			case 3:
 				return d, func() tea.Msg {
-					d.apiClient.Logout()
+					_ = d.apiClient.Logout()
 					return LogoutMsg{}
 				}
 			}

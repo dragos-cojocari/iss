@@ -6,6 +6,7 @@ Documentation for developers and users:
 
 - [Quick Start Guide](./quickstart.md) - Get BORK running in under 5 minutes
 - [Development Guide](./development.md) - Setup, testing, Docker, and configuration
+- [Build & Deployment Guide](./build.md) - Production-optimized Docker builds and deployment
 - [API Guide](./api_guide.md) - REST API documentation with curl examples
 
 ## Design & Architecture
