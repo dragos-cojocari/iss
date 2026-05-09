@@ -145,8 +145,13 @@ func (l *LoginView) View() string {
 		Padding(0, 3).
 		Bold(true)
 
-	focusedButtonStyle := buttonStyle.Copy().
-		Background(MatrixHighlight)
+	focusedButtonStyle := lipgloss.NewStyle().
+		Foreground(MatrixBlack).
+		Background(MatrixHighlight).
+		Border(lipgloss.NormalBorder()).
+		BorderForeground(MatrixHighlight).
+		Padding(0, 3).
+		Bold(true)
 
 	helpStyle := lipgloss.NewStyle().
 		Foreground(MatrixDarkGreen).
@@ -202,13 +207,19 @@ func (l *LoginView) View() string {
 	}
 	formBuilder.WriteString("\n\n")
 
-	// Login button
-	formBuilder.WriteString(strings.Repeat(" ", 15))
+	// Login button (centered)
+	var buttonText string
 	if l.focusedField == 2 {
-		formBuilder.WriteString(focusedButtonStyle.Render("[ Login ]"))
+		buttonText = focusedButtonStyle.Render("[ Login ]")
 	} else {
-		formBuilder.WriteString(buttonStyle.Render("[ Login ]"))
+		buttonText = buttonStyle.Render("[ Login ]")
 	}
+	// Center the button within the form width
+	buttonCenterStyle := lipgloss.NewStyle().
+		Width(40).
+		Align(lipgloss.Center).
+		Background(MatrixBlack)
+	formBuilder.WriteString(buttonCenterStyle.Render(buttonText))
 
 	// Assemble the view
 	var view strings.Builder

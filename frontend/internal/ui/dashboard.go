@@ -101,26 +101,27 @@ func (d *DashboardView) View() string {
 		Bold(true).
 		Foreground(MatrixGreen).
 		Background(MatrixBlack).
-		Padding(0, 2)
+		Padding(0, 2).
+		Width(80)
 
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(MatrixGreen).
 		Background(MatrixBlack).
 		Padding(1, 2).
-		Width(74)
+		Width(80)
 
 	menuItemStyle := lipgloss.NewStyle().
 		Foreground(MatrixDarkGreen).
 		Background(MatrixBlack).
 		Padding(0, 2).
-		Width(70)
+		Width(76)
 
 	selectedMenuStyle := menuItemStyle.Copy().
 		Foreground(MatrixBlack).
 		Background(MatrixGreen).
 		Bold(true).
-		Width(70)
+		Width(76)
 
 	helpStyle := lipgloss.NewStyle().
 		Foreground(MatrixDarkGreen).
@@ -129,18 +130,30 @@ func (d *DashboardView) View() string {
 
 	var view strings.Builder
 
-	// Header
-	header := fmt.Sprintf("BORK - Main Menu                    User: %s", d.user.Username)
+	// Header with right-aligned username
+	leftText := "BORK - Main Menu"
+	rightText := fmt.Sprintf("User: %s", d.user.Username)
+	// Calculate spacing to right-align (80 total width - 4 padding - left text - right text)
+	spacing := 80 - 4 - len(leftText) - len(rightText)
+	if spacing < 1 {
+		spacing = 1
+	}
+	header := leftText + strings.Repeat(" ", spacing) + rightText
 	view.WriteString(headerStyle.Render(header))
 	view.WriteString("\n")
 
 	// Matrix quote
 	quote := GetQuoteManager().GetQuote()
+	// Truncate quote to fit in one line (max 76 chars including quotes)
+	maxQuoteLen := 72 // Leave room for quotes and spacing
+	if len(quote) > maxQuoteLen {
+		quote = quote[:maxQuoteLen-3] + "..."
+	}
 	quoteStyle := lipgloss.NewStyle().
 		Foreground(MatrixDarkGreen).
 		Italic(true).
 		Align(lipgloss.Center).
-		Width(74)
+		Width(80)
 	view.WriteString(quoteStyle.Render(fmt.Sprintf("\" %s \"", quote)))
 	view.WriteString("\n\n")
 
@@ -150,7 +163,7 @@ func (d *DashboardView) View() string {
 		BorderForeground(MatrixDarkGreen).
 		Background(MatrixBlack).
 		Padding(1, 2).
-		Width(74)
+		Width(80)
 
 	var rentalsContent strings.Builder
 	rentalsContent.WriteString(lipgloss.NewStyle().Bold(true).Foreground(MatrixGreen).Render("MY CURRENT RENTALS (0/3)"))

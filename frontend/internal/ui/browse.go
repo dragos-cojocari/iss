@@ -87,6 +87,8 @@ func (b *BrowseBooksView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if b.currentPage > 0 {
 				b.currentPage--
 				b.selectedBook = 0
+				// Cycle to next quote when changing pages
+				GetQuoteManager().NextQuote()
 			}
 			return b, nil
 
@@ -96,6 +98,8 @@ func (b *BrowseBooksView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if b.currentPage < totalPages-1 {
 				b.currentPage++
 				b.selectedBook = 0
+				// Cycle to next quote when changing pages
+				GetQuoteManager().NextQuote()
 			}
 			return b, nil
 
@@ -122,27 +126,28 @@ func (b *BrowseBooksView) View() string {
 		Bold(true).
 		Foreground(MatrixGreen).
 		Background(MatrixBlack).
-		Padding(0, 2)
+		Padding(0, 2).
+		Width(80)
 
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(MatrixGreen).
 		Background(MatrixBlack).
 		Padding(1, 2).
-		Width(74)
+		Width(80)
 
 	bookStyle := lipgloss.NewStyle().
 		Foreground(MatrixDarkGreen).
 		Background(MatrixBlack).
 		Padding(1, 2).
-		Width(68).
+		Width(74).
 		MarginBottom(1)
 
 	selectedBookStyle := bookStyle.Copy().
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(MatrixHighlight).
 		Background(MatrixGray).
-		Width(68)
+		Width(74)
 
 	availableStyle := lipgloss.NewStyle().
 		Foreground(MatrixHighlight).
@@ -158,18 +163,30 @@ func (b *BrowseBooksView) View() string {
 
 	var view strings.Builder
 
-	// Header
-	header := fmt.Sprintf("BORK - Browse Books                 User: %s", b.user.Username)
+	// Header with right-aligned username
+	leftText := "BORK - Browse Books"
+	rightText := fmt.Sprintf("User: %s", b.user.Username)
+	// Calculate spacing to right-align (80 total width - 4 padding - left text - right text)
+	spacing := 80 - 4 - len(leftText) - len(rightText)
+	if spacing < 1 {
+		spacing = 1
+	}
+	header := leftText + strings.Repeat(" ", spacing) + rightText
 	view.WriteString(headerStyle.Render(header))
 	view.WriteString("\n")
 
 	// Matrix quote
 	quote := GetQuoteManager().GetQuote()
+	// Truncate quote to fit in one line (max 76 chars including quotes)
+	maxQuoteLen := 72 // Leave room for quotes and spacing
+	if len(quote) > maxQuoteLen {
+		quote = quote[:maxQuoteLen-3] + "..."
+	}
 	quoteStyle := lipgloss.NewStyle().
 		Foreground(MatrixDarkGreen).
 		Italic(true).
 		Align(lipgloss.Center).
-		Width(74)
+		Width(80)
 	view.WriteString(quoteStyle.Render(fmt.Sprintf("\" %s \"", quote)))
 	view.WriteString("\n\n")
 
@@ -220,6 +237,15 @@ func (b *BrowseBooksView) View() string {
 			} else {
 				booksContent.WriteString(bookStyle.Render(bookContent.String()))
 			}
+			booksContent.WriteString("\n")
+		}
+
+		// Add empty placeholders to maintain consistent height for 4 books
+		booksDisplayed := endIdx - startIdx
+		for i := booksDisplayed; i < b.booksPerPage; i++ {
+			// Create empty content with same structure as real book (4 lines of content)
+			emptyBook := "\n\n\n" // 3 newlines = 4 lines total (including the first line)
+			booksContent.WriteString(bookStyle.Render(emptyBook))
 			booksContent.WriteString("\n")
 		}
 	}
